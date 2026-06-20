@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "climb_log (debug)",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "climb_log (課金キー注入)",
+      "request": "launch",
+      "type": "dart",
+      "comment": "RevenueCat のキーを入れて実行。実キーは env.json（.gitignore済み）か下記を書き換えて使用。",
+      "toolArgs": [
+        "--dart-define=RC_IOS_KEY=appl_xxxxxxxx",
+        "--dart-define=RC_ANDROID_KEY=goog_xxxxxxxx"
+      ]
+    }
+  ]
+}
