@@ -8,6 +8,57 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $GymsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _syncIdMeta = const VerificationMeta('syncId');
+  @override
+  late final GeneratedColumn<String> syncId = GeneratedColumn<String>(
+    'sync_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+    clientDefault: _uuid.v4,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -71,6 +122,10 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
   );
   @override
   List<GeneratedColumn> get $columns => [
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
     id,
     name,
     location,
@@ -89,6 +144,30 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('sync_id')) {
+      context.handle(
+        _syncIdMeta,
+        syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -130,6 +209,22 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
   Gym map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Gym(
+      syncId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sync_id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -160,12 +255,20 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
 }
 
 class Gym extends DataClass implements Insertable<Gym> {
+  final String syncId;
+  final DateTime updatedAt;
+  final bool isDeleted;
+  final bool dirty;
   final int id;
   final String name;
   final String? location;
   final String gradeSystem;
   final DateTime createdAt;
   const Gym({
+    required this.syncId,
+    required this.updatedAt,
+    required this.isDeleted,
+    required this.dirty,
     required this.id,
     required this.name,
     this.location,
@@ -175,6 +278,10 @@ class Gym extends DataClass implements Insertable<Gym> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['sync_id'] = Variable<String>(syncId);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['dirty'] = Variable<bool>(dirty);
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     if (!nullToAbsent || location != null) {
@@ -187,6 +294,10 @@ class Gym extends DataClass implements Insertable<Gym> {
 
   GymsCompanion toCompanion(bool nullToAbsent) {
     return GymsCompanion(
+      syncId: Value(syncId),
+      updatedAt: Value(updatedAt),
+      isDeleted: Value(isDeleted),
+      dirty: Value(dirty),
       id: Value(id),
       name: Value(name),
       location: location == null && nullToAbsent
@@ -203,6 +314,10 @@ class Gym extends DataClass implements Insertable<Gym> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Gym(
+      syncId: serializer.fromJson<String>(json['syncId']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       location: serializer.fromJson<String?>(json['location']),
@@ -214,6 +329,10 @@ class Gym extends DataClass implements Insertable<Gym> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'syncId': serializer.toJson<String>(syncId),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'dirty': serializer.toJson<bool>(dirty),
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'location': serializer.toJson<String?>(location),
@@ -223,12 +342,20 @@ class Gym extends DataClass implements Insertable<Gym> {
   }
 
   Gym copyWith({
+    String? syncId,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    bool? dirty,
     int? id,
     String? name,
     Value<String?> location = const Value.absent(),
     String? gradeSystem,
     DateTime? createdAt,
   }) => Gym(
+    syncId: syncId ?? this.syncId,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isDeleted: isDeleted ?? this.isDeleted,
+    dirty: dirty ?? this.dirty,
     id: id ?? this.id,
     name: name ?? this.name,
     location: location.present ? location.value : this.location,
@@ -237,6 +364,10 @@ class Gym extends DataClass implements Insertable<Gym> {
   );
   Gym copyWithCompanion(GymsCompanion data) {
     return Gym(
+      syncId: data.syncId.present ? data.syncId.value : this.syncId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       location: data.location.present ? data.location.value : this.location,
@@ -250,6 +381,10 @@ class Gym extends DataClass implements Insertable<Gym> {
   @override
   String toString() {
     return (StringBuffer('Gym(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('location: $location, ')
@@ -260,11 +395,25 @@ class Gym extends DataClass implements Insertable<Gym> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name, location, gradeSystem, createdAt);
+  int get hashCode => Object.hash(
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
+    id,
+    name,
+    location,
+    gradeSystem,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Gym &&
+          other.syncId == this.syncId &&
+          other.updatedAt == this.updatedAt &&
+          other.isDeleted == this.isDeleted &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.name == this.name &&
           other.location == this.location &&
@@ -273,12 +422,20 @@ class Gym extends DataClass implements Insertable<Gym> {
 }
 
 class GymsCompanion extends UpdateCompanion<Gym> {
+  final Value<String> syncId;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isDeleted;
+  final Value<bool> dirty;
   final Value<int> id;
   final Value<String> name;
   final Value<String?> location;
   final Value<String> gradeSystem;
   final Value<DateTime> createdAt;
   const GymsCompanion({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.location = const Value.absent(),
@@ -286,6 +443,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
     this.createdAt = const Value.absent(),
   });
   GymsCompanion.insert({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required String name,
     this.location = const Value.absent(),
@@ -293,6 +454,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
     this.createdAt = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Gym> custom({
+    Expression<String>? syncId,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isDeleted,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? location,
@@ -300,6 +465,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
+      if (syncId != null) 'sync_id': syncId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (location != null) 'location': location,
@@ -309,6 +478,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
   }
 
   GymsCompanion copyWith({
+    Value<String>? syncId,
+    Value<DateTime>? updatedAt,
+    Value<bool>? isDeleted,
+    Value<bool>? dirty,
     Value<int>? id,
     Value<String>? name,
     Value<String?>? location,
@@ -316,6 +489,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
     Value<DateTime>? createdAt,
   }) {
     return GymsCompanion(
+      syncId: syncId ?? this.syncId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       name: name ?? this.name,
       location: location ?? this.location,
@@ -327,6 +504,18 @@ class GymsCompanion extends UpdateCompanion<Gym> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (syncId.present) {
+      map['sync_id'] = Variable<String>(syncId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -348,6 +537,10 @@ class GymsCompanion extends UpdateCompanion<Gym> {
   @override
   String toString() {
     return (StringBuffer('GymsCompanion(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('location: $location, ')
@@ -364,6 +557,57 @@ class $WallTypesTable extends WallTypes
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $WallTypesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _syncIdMeta = const VerificationMeta('syncId');
+  @override
+  late final GeneratedColumn<String> syncId = GeneratedColumn<String>(
+    'sync_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+    clientDefault: _uuid.v4,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -391,7 +635,14 @@ class $WallTypesTable extends WallTypes
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  List<GeneratedColumn> get $columns => [
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
+    id,
+    name,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -404,6 +655,30 @@ class $WallTypesTable extends WallTypes
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('sync_id')) {
+      context.handle(
+        _syncIdMeta,
+        syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -424,6 +699,22 @@ class $WallTypesTable extends WallTypes
   WallType map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return WallType(
+      syncId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sync_id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -442,19 +733,41 @@ class $WallTypesTable extends WallTypes
 }
 
 class WallType extends DataClass implements Insertable<WallType> {
+  final String syncId;
+  final DateTime updatedAt;
+  final bool isDeleted;
+  final bool dirty;
   final int id;
   final String name;
-  const WallType({required this.id, required this.name});
+  const WallType({
+    required this.syncId,
+    required this.updatedAt,
+    required this.isDeleted,
+    required this.dirty,
+    required this.id,
+    required this.name,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['sync_id'] = Variable<String>(syncId);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['dirty'] = Variable<bool>(dirty);
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     return map;
   }
 
   WallTypesCompanion toCompanion(bool nullToAbsent) {
-    return WallTypesCompanion(id: Value(id), name: Value(name));
+    return WallTypesCompanion(
+      syncId: Value(syncId),
+      updatedAt: Value(updatedAt),
+      isDeleted: Value(isDeleted),
+      dirty: Value(dirty),
+      id: Value(id),
+      name: Value(name),
+    );
   }
 
   factory WallType.fromJson(
@@ -463,6 +776,10 @@ class WallType extends DataClass implements Insertable<WallType> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return WallType(
+      syncId: serializer.fromJson<String>(json['syncId']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
     );
@@ -471,15 +788,36 @@ class WallType extends DataClass implements Insertable<WallType> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'syncId': serializer.toJson<String>(syncId),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'dirty': serializer.toJson<bool>(dirty),
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
     };
   }
 
-  WallType copyWith({int? id, String? name}) =>
-      WallType(id: id ?? this.id, name: name ?? this.name);
+  WallType copyWith({
+    String? syncId,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    bool? dirty,
+    int? id,
+    String? name,
+  }) => WallType(
+    syncId: syncId ?? this.syncId,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isDeleted: isDeleted ?? this.isDeleted,
+    dirty: dirty ?? this.dirty,
+    id: id ?? this.id,
+    name: name ?? this.name,
+  );
   WallType copyWithCompanion(WallTypesCompanion data) {
     return WallType(
+      syncId: data.syncId.present ? data.syncId.value : this.syncId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
     );
@@ -488,6 +826,10 @@ class WallType extends DataClass implements Insertable<WallType> {
   @override
   String toString() {
     return (StringBuffer('WallType(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name')
           ..write(')'))
@@ -495,41 +837,94 @@ class WallType extends DataClass implements Insertable<WallType> {
   }
 
   @override
-  int get hashCode => Object.hash(id, name);
+  int get hashCode =>
+      Object.hash(syncId, updatedAt, isDeleted, dirty, id, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is WallType && other.id == this.id && other.name == this.name);
+      (other is WallType &&
+          other.syncId == this.syncId &&
+          other.updatedAt == this.updatedAt &&
+          other.isDeleted == this.isDeleted &&
+          other.dirty == this.dirty &&
+          other.id == this.id &&
+          other.name == this.name);
 }
 
 class WallTypesCompanion extends UpdateCompanion<WallType> {
+  final Value<String> syncId;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isDeleted;
+  final Value<bool> dirty;
   final Value<int> id;
   final Value<String> name;
   const WallTypesCompanion({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.name = const Value.absent(),
   });
   WallTypesCompanion.insert({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required String name,
   }) : name = Value(name);
   static Insertable<WallType> custom({
+    Expression<String>? syncId,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isDeleted,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<String>? name,
   }) {
     return RawValuesInsertable({
+      if (syncId != null) 'sync_id': syncId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (name != null) 'name': name,
     });
   }
 
-  WallTypesCompanion copyWith({Value<int>? id, Value<String>? name}) {
-    return WallTypesCompanion(id: id ?? this.id, name: name ?? this.name);
+  WallTypesCompanion copyWith({
+    Value<String>? syncId,
+    Value<DateTime>? updatedAt,
+    Value<bool>? isDeleted,
+    Value<bool>? dirty,
+    Value<int>? id,
+    Value<String>? name,
+  }) {
+    return WallTypesCompanion(
+      syncId: syncId ?? this.syncId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      dirty: dirty ?? this.dirty,
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (syncId.present) {
+      map['sync_id'] = Variable<String>(syncId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -542,6 +937,10 @@ class WallTypesCompanion extends UpdateCompanion<WallType> {
   @override
   String toString() {
     return (StringBuffer('WallTypesCompanion(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('name: $name')
           ..write(')'))
@@ -554,6 +953,57 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ClimbsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _syncIdMeta = const VerificationMeta('syncId');
+  @override
+  late final GeneratedColumn<String> syncId = GeneratedColumn<String>(
+    'sync_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+    clientDefault: _uuid.v4,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -674,6 +1124,10 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
   );
   @override
   List<GeneratedColumn> get $columns => [
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
     id,
     gymId,
     date,
@@ -697,6 +1151,30 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('sync_id')) {
+      context.handle(
+        _syncIdMeta,
+        syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -772,6 +1250,22 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
   Climb map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Climb(
+      syncId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sync_id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -822,6 +1316,10 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
 }
 
 class Climb extends DataClass implements Insertable<Climb> {
+  final String syncId;
+  final DateTime updatedAt;
+  final bool isDeleted;
+  final bool dirty;
   final int id;
   final int gymId;
   final DateTime date;
@@ -833,6 +1331,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   final String? memo;
   final DateTime createdAt;
   const Climb({
+    required this.syncId,
+    required this.updatedAt,
+    required this.isDeleted,
+    required this.dirty,
     required this.id,
     required this.gymId,
     required this.date,
@@ -847,6 +1349,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['sync_id'] = Variable<String>(syncId);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['dirty'] = Variable<bool>(dirty);
     map['id'] = Variable<int>(id);
     map['gym_id'] = Variable<int>(gymId);
     map['date'] = Variable<DateTime>(date);
@@ -868,6 +1374,10 @@ class Climb extends DataClass implements Insertable<Climb> {
 
   ClimbsCompanion toCompanion(bool nullToAbsent) {
     return ClimbsCompanion(
+      syncId: Value(syncId),
+      updatedAt: Value(updatedAt),
+      isDeleted: Value(isDeleted),
+      dirty: Value(dirty),
       id: Value(id),
       gymId: Value(gymId),
       date: Value(date),
@@ -891,6 +1401,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Climb(
+      syncId: serializer.fromJson<String>(json['syncId']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       gymId: serializer.fromJson<int>(json['gymId']),
       date: serializer.fromJson<DateTime>(json['date']),
@@ -907,6 +1421,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'syncId': serializer.toJson<String>(syncId),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'dirty': serializer.toJson<bool>(dirty),
       'id': serializer.toJson<int>(id),
       'gymId': serializer.toJson<int>(gymId),
       'date': serializer.toJson<DateTime>(date),
@@ -921,6 +1439,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   }
 
   Climb copyWith({
+    String? syncId,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    bool? dirty,
     int? id,
     int? gymId,
     DateTime? date,
@@ -932,6 +1454,10 @@ class Climb extends DataClass implements Insertable<Climb> {
     Value<String?> memo = const Value.absent(),
     DateTime? createdAt,
   }) => Climb(
+    syncId: syncId ?? this.syncId,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isDeleted: isDeleted ?? this.isDeleted,
+    dirty: dirty ?? this.dirty,
     id: id ?? this.id,
     gymId: gymId ?? this.gymId,
     date: date ?? this.date,
@@ -945,6 +1471,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   );
   Climb copyWithCompanion(ClimbsCompanion data) {
     return Climb(
+      syncId: data.syncId.present ? data.syncId.value : this.syncId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       gymId: data.gymId.present ? data.gymId.value : this.gymId,
       date: data.date.present ? data.date.value : this.date,
@@ -963,6 +1493,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   @override
   String toString() {
     return (StringBuffer('Climb(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('gymId: $gymId, ')
           ..write('date: $date, ')
@@ -979,6 +1513,10 @@ class Climb extends DataClass implements Insertable<Climb> {
 
   @override
   int get hashCode => Object.hash(
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
     id,
     gymId,
     date,
@@ -994,6 +1532,10 @@ class Climb extends DataClass implements Insertable<Climb> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Climb &&
+          other.syncId == this.syncId &&
+          other.updatedAt == this.updatedAt &&
+          other.isDeleted == this.isDeleted &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.gymId == this.gymId &&
           other.date == this.date &&
@@ -1007,6 +1549,10 @@ class Climb extends DataClass implements Insertable<Climb> {
 }
 
 class ClimbsCompanion extends UpdateCompanion<Climb> {
+  final Value<String> syncId;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isDeleted;
+  final Value<bool> dirty;
   final Value<int> id;
   final Value<int> gymId;
   final Value<DateTime> date;
@@ -1018,6 +1564,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
   final Value<String?> memo;
   final Value<DateTime> createdAt;
   const ClimbsCompanion({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.gymId = const Value.absent(),
     this.date = const Value.absent(),
@@ -1030,6 +1580,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
     this.createdAt = const Value.absent(),
   });
   ClimbsCompanion.insert({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required int gymId,
     required DateTime date,
@@ -1044,6 +1598,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
        date = Value(date),
        grade = Value(grade);
   static Insertable<Climb> custom({
+    Expression<String>? syncId,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isDeleted,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<int>? gymId,
     Expression<DateTime>? date,
@@ -1056,6 +1614,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
+      if (syncId != null) 'sync_id': syncId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (gymId != null) 'gym_id': gymId,
       if (date != null) 'date': date,
@@ -1070,6 +1632,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
   }
 
   ClimbsCompanion copyWith({
+    Value<String>? syncId,
+    Value<DateTime>? updatedAt,
+    Value<bool>? isDeleted,
+    Value<bool>? dirty,
     Value<int>? id,
     Value<int>? gymId,
     Value<DateTime>? date,
@@ -1082,6 +1648,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
     Value<DateTime>? createdAt,
   }) {
     return ClimbsCompanion(
+      syncId: syncId ?? this.syncId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       gymId: gymId ?? this.gymId,
       date: date ?? this.date,
@@ -1098,6 +1668,18 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (syncId.present) {
+      map['sync_id'] = Variable<String>(syncId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -1134,6 +1716,10 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
   @override
   String toString() {
     return (StringBuffer('ClimbsCompanion(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('gymId: $gymId, ')
           ..write('date: $date, ')
@@ -1155,6 +1741,57 @@ class $ClimbPhotosTable extends ClimbPhotos
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ClimbPhotosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _syncIdMeta = const VerificationMeta('syncId');
+  @override
+  late final GeneratedColumn<String> syncId = GeneratedColumn<String>(
+    'sync_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+    clientDefault: _uuid.v4,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: DateTime.now,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _dirtyMeta = const VerificationMeta('dirty');
+  @override
+  late final GeneratedColumn<bool> dirty = GeneratedColumn<bool>(
+    'dirty',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("dirty" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1217,6 +1854,10 @@ class $ClimbPhotosTable extends ClimbPhotos
   );
   @override
   List<GeneratedColumn> get $columns => [
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
     id,
     climbId,
     path,
@@ -1235,6 +1876,30 @@ class $ClimbPhotosTable extends ClimbPhotos
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('sync_id')) {
+      context.handle(
+        _syncIdMeta,
+        syncId.isAcceptableOrUnknown(data['sync_id']!, _syncIdMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('dirty')) {
+      context.handle(
+        _dirtyMeta,
+        dirty.isAcceptableOrUnknown(data['dirty']!, _dirtyMeta),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -1275,6 +1940,22 @@ class $ClimbPhotosTable extends ClimbPhotos
   ClimbPhoto map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ClimbPhoto(
+      syncId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sync_id'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      dirty: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}dirty'],
+      )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1305,12 +1986,20 @@ class $ClimbPhotosTable extends ClimbPhotos
 }
 
 class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
+  final String syncId;
+  final DateTime updatedAt;
+  final bool isDeleted;
+  final bool dirty;
   final int id;
   final int climbId;
   final String path;
   final int sortOrder;
   final DateTime createdAt;
   const ClimbPhoto({
+    required this.syncId,
+    required this.updatedAt,
+    required this.isDeleted,
+    required this.dirty,
     required this.id,
     required this.climbId,
     required this.path,
@@ -1320,6 +2009,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['sync_id'] = Variable<String>(syncId);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['dirty'] = Variable<bool>(dirty);
     map['id'] = Variable<int>(id);
     map['climb_id'] = Variable<int>(climbId);
     map['path'] = Variable<String>(path);
@@ -1330,6 +2023,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
 
   ClimbPhotosCompanion toCompanion(bool nullToAbsent) {
     return ClimbPhotosCompanion(
+      syncId: Value(syncId),
+      updatedAt: Value(updatedAt),
+      isDeleted: Value(isDeleted),
+      dirty: Value(dirty),
       id: Value(id),
       climbId: Value(climbId),
       path: Value(path),
@@ -1344,6 +2041,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ClimbPhoto(
+      syncId: serializer.fromJson<String>(json['syncId']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      dirty: serializer.fromJson<bool>(json['dirty']),
       id: serializer.fromJson<int>(json['id']),
       climbId: serializer.fromJson<int>(json['climbId']),
       path: serializer.fromJson<String>(json['path']),
@@ -1355,6 +2056,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'syncId': serializer.toJson<String>(syncId),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'dirty': serializer.toJson<bool>(dirty),
       'id': serializer.toJson<int>(id),
       'climbId': serializer.toJson<int>(climbId),
       'path': serializer.toJson<String>(path),
@@ -1364,12 +2069,20 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   }
 
   ClimbPhoto copyWith({
+    String? syncId,
+    DateTime? updatedAt,
+    bool? isDeleted,
+    bool? dirty,
     int? id,
     int? climbId,
     String? path,
     int? sortOrder,
     DateTime? createdAt,
   }) => ClimbPhoto(
+    syncId: syncId ?? this.syncId,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isDeleted: isDeleted ?? this.isDeleted,
+    dirty: dirty ?? this.dirty,
     id: id ?? this.id,
     climbId: climbId ?? this.climbId,
     path: path ?? this.path,
@@ -1378,6 +2091,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   );
   ClimbPhoto copyWithCompanion(ClimbPhotosCompanion data) {
     return ClimbPhoto(
+      syncId: data.syncId.present ? data.syncId.value : this.syncId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      dirty: data.dirty.present ? data.dirty.value : this.dirty,
       id: data.id.present ? data.id.value : this.id,
       climbId: data.climbId.present ? data.climbId.value : this.climbId,
       path: data.path.present ? data.path.value : this.path,
@@ -1389,6 +2106,10 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   @override
   String toString() {
     return (StringBuffer('ClimbPhoto(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('climbId: $climbId, ')
           ..write('path: $path, ')
@@ -1399,11 +2120,25 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
   }
 
   @override
-  int get hashCode => Object.hash(id, climbId, path, sortOrder, createdAt);
+  int get hashCode => Object.hash(
+    syncId,
+    updatedAt,
+    isDeleted,
+    dirty,
+    id,
+    climbId,
+    path,
+    sortOrder,
+    createdAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ClimbPhoto &&
+          other.syncId == this.syncId &&
+          other.updatedAt == this.updatedAt &&
+          other.isDeleted == this.isDeleted &&
+          other.dirty == this.dirty &&
           other.id == this.id &&
           other.climbId == this.climbId &&
           other.path == this.path &&
@@ -1412,12 +2147,20 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
 }
 
 class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
+  final Value<String> syncId;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isDeleted;
+  final Value<bool> dirty;
   final Value<int> id;
   final Value<int> climbId;
   final Value<String> path;
   final Value<int> sortOrder;
   final Value<DateTime> createdAt;
   const ClimbPhotosCompanion({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     this.climbId = const Value.absent(),
     this.path = const Value.absent(),
@@ -1425,6 +2168,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
     this.createdAt = const Value.absent(),
   });
   ClimbPhotosCompanion.insert({
+    this.syncId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.dirty = const Value.absent(),
     this.id = const Value.absent(),
     required int climbId,
     required String path,
@@ -1433,6 +2180,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
   }) : climbId = Value(climbId),
        path = Value(path);
   static Insertable<ClimbPhoto> custom({
+    Expression<String>? syncId,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isDeleted,
+    Expression<bool>? dirty,
     Expression<int>? id,
     Expression<int>? climbId,
     Expression<String>? path,
@@ -1440,6 +2191,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
+      if (syncId != null) 'sync_id': syncId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (dirty != null) 'dirty': dirty,
       if (id != null) 'id': id,
       if (climbId != null) 'climb_id': climbId,
       if (path != null) 'path': path,
@@ -1449,6 +2204,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
   }
 
   ClimbPhotosCompanion copyWith({
+    Value<String>? syncId,
+    Value<DateTime>? updatedAt,
+    Value<bool>? isDeleted,
+    Value<bool>? dirty,
     Value<int>? id,
     Value<int>? climbId,
     Value<String>? path,
@@ -1456,6 +2215,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
     Value<DateTime>? createdAt,
   }) {
     return ClimbPhotosCompanion(
+      syncId: syncId ?? this.syncId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      dirty: dirty ?? this.dirty,
       id: id ?? this.id,
       climbId: climbId ?? this.climbId,
       path: path ?? this.path,
@@ -1467,6 +2230,18 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (syncId.present) {
+      map['sync_id'] = Variable<String>(syncId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (dirty.present) {
+      map['dirty'] = Variable<bool>(dirty.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -1488,6 +2263,10 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
   @override
   String toString() {
     return (StringBuffer('ClimbPhotosCompanion(')
+          ..write('syncId: $syncId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('dirty: $dirty, ')
           ..write('id: $id, ')
           ..write('climbId: $climbId, ')
           ..write('path: $path, ')
@@ -1543,6 +2322,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$GymsTableCreateCompanionBuilder =
     GymsCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       required String name,
       Value<String?> location,
@@ -1551,6 +2334,10 @@ typedef $$GymsTableCreateCompanionBuilder =
     });
 typedef $$GymsTableUpdateCompanionBuilder =
     GymsCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       Value<String> name,
       Value<String?> location,
@@ -1590,6 +2377,26 @@ class $$GymsTableFilterComposer extends Composer<_$AppDatabase, $GymsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -1649,6 +2456,26 @@ class $$GymsTableOrderingComposer extends Composer<_$AppDatabase, $GymsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -1684,6 +2511,18 @@ class $$GymsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get syncId =>
+      $composableBuilder(column: $table.syncId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -1755,12 +2594,20 @@ class $$GymsTableTableManager
               $$GymsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String?> location = const Value.absent(),
                 Value<String> gradeSystem = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => GymsCompanion(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 name: name,
                 location: location,
@@ -1769,12 +2616,20 @@ class $$GymsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required String name,
                 Value<String?> location = const Value.absent(),
                 Value<String> gradeSystem = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => GymsCompanion.insert(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 name: name,
                 location: location,
@@ -1829,9 +2684,23 @@ typedef $$GymsTableProcessedTableManager =
       PrefetchHooks Function({bool climbsRefs})
     >;
 typedef $$WallTypesTableCreateCompanionBuilder =
-    WallTypesCompanion Function({Value<int> id, required String name});
+    WallTypesCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
+      Value<int> id,
+      required String name,
+    });
 typedef $$WallTypesTableUpdateCompanionBuilder =
-    WallTypesCompanion Function({Value<int> id, Value<String> name});
+    WallTypesCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
+      Value<int> id,
+      Value<String> name,
+    });
 
 final class $$WallTypesTableReferences
     extends BaseReferences<_$AppDatabase, $WallTypesTable, WallType> {
@@ -1866,6 +2735,26 @@ class $$WallTypesTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -1911,6 +2800,26 @@ class $$WallTypesTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -1931,6 +2840,18 @@ class $$WallTypesTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get syncId =>
+      $composableBuilder(column: $table.syncId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -1991,12 +2912,36 @@ class $$WallTypesTableTableManager
               $$WallTypesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
-              }) => WallTypesCompanion(id: id, name: name),
+              }) => WallTypesCompanion(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
+                id: id,
+                name: name,
+              ),
           createCompanionCallback:
-              ({Value<int> id = const Value.absent(), required String name}) =>
-                  WallTypesCompanion.insert(id: id, name: name),
+              ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                required String name,
+              }) => WallTypesCompanion.insert(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
+                id: id,
+                name: name,
+              ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
@@ -2047,6 +2992,10 @@ typedef $$WallTypesTableProcessedTableManager =
     >;
 typedef $$ClimbsTableCreateCompanionBuilder =
     ClimbsCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       required int gymId,
       required DateTime date,
@@ -2060,6 +3009,10 @@ typedef $$ClimbsTableCreateCompanionBuilder =
     });
 typedef $$ClimbsTableUpdateCompanionBuilder =
     ClimbsCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       Value<int> gymId,
       Value<DateTime> date,
@@ -2138,6 +3091,26 @@ class $$ClimbsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -2259,6 +3232,26 @@ class $$ClimbsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -2355,6 +3348,18 @@ class $$ClimbsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get syncId =>
+      $composableBuilder(column: $table.syncId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -2483,6 +3488,10 @@ class $$ClimbsTableTableManager
               $$ClimbsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int> gymId = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
@@ -2494,6 +3503,10 @@ class $$ClimbsTableTableManager
                 Value<String?> memo = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => ClimbsCompanion(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 gymId: gymId,
                 date: date,
@@ -2507,6 +3520,10 @@ class $$ClimbsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required int gymId,
                 required DateTime date,
@@ -2518,6 +3535,10 @@ class $$ClimbsTableTableManager
                 Value<String?> memo = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => ClimbsCompanion.insert(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 gymId: gymId,
                 date: date,
@@ -2638,6 +3659,10 @@ typedef $$ClimbsTableProcessedTableManager =
     >;
 typedef $$ClimbPhotosTableCreateCompanionBuilder =
     ClimbPhotosCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       required int climbId,
       required String path,
@@ -2646,6 +3671,10 @@ typedef $$ClimbPhotosTableCreateCompanionBuilder =
     });
 typedef $$ClimbPhotosTableUpdateCompanionBuilder =
     ClimbPhotosCompanion Function({
+      Value<String> syncId,
+      Value<DateTime> updatedAt,
+      Value<bool> isDeleted,
+      Value<bool> dirty,
       Value<int> id,
       Value<int> climbId,
       Value<String> path,
@@ -2684,6 +3713,26 @@ class $$ClimbPhotosTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -2737,6 +3786,26 @@ class $$ClimbPhotosTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get syncId => $composableBuilder(
+    column: $table.syncId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get dirty => $composableBuilder(
+    column: $table.dirty,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -2790,6 +3859,18 @@ class $$ClimbPhotosTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get syncId =>
+      $composableBuilder(column: $table.syncId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get dirty =>
+      $composableBuilder(column: $table.dirty, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -2854,12 +3935,20 @@ class $$ClimbPhotosTableTableManager
               $$ClimbPhotosTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<int> climbId = const Value.absent(),
                 Value<String> path = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => ClimbPhotosCompanion(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 climbId: climbId,
                 path: path,
@@ -2868,12 +3957,20 @@ class $$ClimbPhotosTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String> syncId = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<bool> dirty = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required int climbId,
                 required String path,
                 Value<int> sortOrder = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
               }) => ClimbPhotosCompanion.insert(
+                syncId: syncId,
+                updatedAt: updatedAt,
+                isDeleted: isDeleted,
+                dirty: dirty,
                 id: id,
                 climbId: climbId,
                 path: path,

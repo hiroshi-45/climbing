@@ -12,6 +12,10 @@ Climb _climb({
 }) {
   return Climb(
     id: 0,
+    syncId: 'test-$grade-${date.microsecondsSinceEpoch}-$isSent-$attempts-$wallTypeId',
+    updatedAt: date,
+    isDeleted: false,
+    dirty: true,
     gymId: 1,
     date: date,
     grade: grade,
@@ -95,4 +99,11 @@ void main() {
   });
 }
 
-WallType _wall(int id, String name) => WallType(id: id, name: name);
+WallType _wall(int id, String name) => WallType(
+  id: id,
+  syncId: 'test-wall-$id',
+  updatedAt: DateTime(2026),
+  isDeleted: false,
+  dirty: false,
+  name: name,
+);

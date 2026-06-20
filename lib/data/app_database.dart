@@ -1,10 +1,27 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 part 'app_database.g.dart';
 
+const _uuid = Uuid();
+
+/// 同期対応テーブルが共通で持つカラム群。
+///
+/// - [syncId]   : 端末をまたいで一意な同期キー（int の自動採番PKは端末間で
+///                衝突するため、クラウド上の文書キーにはこちらを使う）。
+/// - [updatedAt]: 最終更新時刻。競合は Last-Write-Wins で解決する。
+/// - [isDeleted]: 論理削除。物理削除は他端末へ伝播できないため tombstone 化する。
+/// - [dirty]    : ローカル未同期フラグ。Phase1 の push 対象判定に使う。
+mixin _SyncColumns on Table {
+  TextColumn get syncId => text().unique().clientDefault(_uuid.v4)();
+  DateTimeColumn get updatedAt => dateTime().clientDefault(DateTime.now)();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
+  BoolColumn get dirty => boolean().withDefault(const Constant(true))();
+}
+
 /// ジム。グレード体系（級段 / 色テープ / V）を保持する。
-class Gyms extends Table {
+class Gyms extends Table with _SyncColumns {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 100)();
   TextColumn get location => text().nullable()();
@@ -14,13 +31,13 @@ class Gyms extends Table {
 }
 
 /// 壁の種類マスタ（スラブ / 垂壁 / 強傾斜 / ルーフ など。ユーザー追加可）。
-class WallTypes extends Table {
+class WallTypes extends Table with _SyncColumns {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 50)();
 }
 
 /// 登攀記録。1課題1トライセット分。
-class Climbs extends Table {
+class Climbs extends Table with _SyncColumns {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get gymId =>
       integer().references(Gyms, #id, onDelete: KeyAction.cascade)();
@@ -41,7 +58,7 @@ class Climbs extends Table {
 }
 
 /// 登攀記録に添付する写真（1記録に複数枚。無料は1枚、プレミアムは無制限）。
-class ClimbPhotos extends Table {
+class ClimbPhotos extends Table with _SyncColumns {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get climbId =>
       integer().references(Climbs, #id, onDelete: KeyAction.cascade)();
@@ -50,40 +67,37 @@ class ClimbPhotos extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+/// デフォルト壁種別。端末間で重複登録されないよう syncId を固定する
+/// （別端末でも同じ syncId で seed されるため、同期時に同一行として扱える）。
+const _defaultWallTypes = <(String, String)>[
+  ('seed-wall-slab', 'スラブ'),
+  ('seed-wall-vertical', '垂壁'),
+  ('seed-wall-overhang', '強傾斜'),
+  ('seed-wall-roof', 'ルーフ'),
+];
+
 @DriftDatabase(tables: [Gyms, WallTypes, Climbs, ClimbPhotos])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
-      // デフォルトの壁種別をシード
-      await batch((b) {
-        b.insertAll(wallTypes, const [
-          WallTypesCompanion(name: Value('スラブ')),
-          WallTypesCompanion(name: Value('垂壁')),
-          WallTypesCompanion(name: Value('強傾斜')),
-          WallTypesCompanion(name: Value('ルーフ')),
-        ]);
-      });
+      await _seedWallTypes();
     },
     onUpgrade: (m, from, to) async {
-      if (from < 2) {
-        await m.createTable(climbPhotos);
-        // 既存の単一写真を新しい写真テーブルへ移行
-        final withPhoto = await (select(
-          climbs,
-        )..where((c) => c.photoPath.isNotNull())).get();
-        for (final c in withPhoto) {
-          await into(climbPhotos).insert(
-            ClimbPhotosCompanion.insert(climbId: c.id, path: c.photoPath!),
-          );
+      if (from < 3) {
+        // 同期対応スキーマへ移行。旧データは破棄して作り直す（ユーザー許諾済み）。
+        for (final t in allTables) {
+          await customStatement('DROP TABLE IF EXISTS ${t.actualTableName}');
         }
+        await m.createAll();
+        await _seedWallTypes();
       }
     },
     beforeOpen: (details) async {
@@ -92,55 +106,110 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
-  // --- Gyms ---
-  Stream<List<Gym>> watchGyms() => (select(
-    gyms,
-  )..orderBy([(g) => OrderingTerm(expression: g.name)])).watch();
+  /// デフォルト壁種別を投入する。固定 syncId・dirty=false で、標準データとして扱う。
+  Future<void> _seedWallTypes() async {
+    await batch((b) {
+      b.insertAll(wallTypes, [
+        for (final (sid, name) in _defaultWallTypes)
+          WallTypesCompanion.insert(
+            name: name,
+            syncId: Value(sid),
+            dirty: const Value(false),
+          ),
+      ]);
+    });
+  }
 
-  Future<Gym?> getGym(int id) =>
-      (select(gyms)..where((g) => g.id.equals(id))).getSingleOrNull();
+  // --- Gyms ---
+  Stream<List<Gym>> watchGyms() =>
+      (select(gyms)
+            ..where((g) => g.isDeleted.equals(false))
+            ..orderBy([(g) => OrderingTerm(expression: g.name)]))
+          .watch();
+
+  Future<Gym?> getGym(int id) => (select(
+    gyms,
+  )..where((g) => g.id.equals(id) & g.isDeleted.equals(false))).getSingleOrNull();
 
   Future<int> insertGym(GymsCompanion gym) => into(gyms).insert(gym);
 
-  Future<bool> updateGym(GymsCompanion gym) => update(gyms).replace(gym);
+  Future<bool> updateGym(GymsCompanion gym) async {
+    final n = await (update(gyms)..where((g) => g.id.equals(gym.id.value)))
+        .write(
+          gym.copyWith(updatedAt: Value(DateTime.now()), dirty: const Value(true)),
+        );
+    return n > 0;
+  }
 
-  Future<int> deleteGym(int id) =>
-      (delete(gyms)..where((g) => g.id.equals(id))).go();
+  /// ジムを論理削除し、ひも付く登攀記録と写真も連鎖的に論理削除する。
+  Future<int> deleteGym(int id) async {
+    final now = DateTime.now();
+    final climbIds = (await (select(
+      climbs,
+    )..where((c) => c.gymId.equals(id))).get()).map((c) => c.id).toList();
+    if (climbIds.isNotEmpty) {
+      await (update(climbPhotos)..where((p) => p.climbId.isIn(climbIds)))
+          .write(_photoTombstone(now));
+      await (update(climbs)..where((c) => c.gymId.equals(id)))
+          .write(_climbTombstone(now));
+    }
+    return (update(gyms)..where((g) => g.id.equals(id))).write(_gymTombstone(now));
+  }
 
   // --- WallTypes ---
-  Stream<List<WallType>> watchWallTypes() => (select(
-    wallTypes,
-  )..orderBy([(w) => OrderingTerm(expression: w.id)])).watch();
+  Stream<List<WallType>> watchWallTypes() =>
+      (select(wallTypes)
+            ..where((w) => w.isDeleted.equals(false))
+            ..orderBy([(w) => OrderingTerm(expression: w.id)]))
+          .watch();
 
   Future<int> insertWallType(String name) =>
       into(wallTypes).insert(WallTypesCompanion(name: Value(name)));
 
   // --- Climbs ---
   Stream<List<Climb>> watchClimbs() =>
-      (select(climbs)..orderBy([
-            (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
-            (c) =>
-                OrderingTerm(expression: c.createdAt, mode: OrderingMode.desc),
-          ]))
+      (select(climbs)
+            ..where((c) => c.isDeleted.equals(false))
+            ..orderBy([
+              (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
+              (c) =>
+                  OrderingTerm(expression: c.createdAt, mode: OrderingMode.desc),
+            ]))
           .watch();
 
   Future<int> insertClimb(ClimbsCompanion climb) => into(climbs).insert(climb);
 
-  Future<bool> updateClimb(ClimbsCompanion climb) =>
-      update(climbs).replace(climb);
+  Future<bool> updateClimb(ClimbsCompanion climb) async {
+    final n = await (update(climbs)..where((c) => c.id.equals(climb.id.value)))
+        .write(
+          climb.copyWith(
+            updatedAt: Value(DateTime.now()),
+            dirty: const Value(true),
+          ),
+        );
+    return n > 0;
+  }
 
-  Future<int> deleteClimb(int id) =>
-      (delete(climbs)..where((c) => c.id.equals(id))).go();
+  /// 登攀記録を論理削除し、添付写真も連鎖的に論理削除する。
+  Future<int> deleteClimb(int id) async {
+    final now = DateTime.now();
+    await (update(climbPhotos)..where((p) => p.climbId.equals(id)))
+        .write(_photoTombstone(now));
+    return (update(climbs)..where((c) => c.id.equals(id)))
+        .write(_climbTombstone(now));
+  }
 
   // --- ClimbPhotos ---
   /// 全写真を監視（記録一覧のサムネ表示用）。
-  Stream<List<ClimbPhoto>> watchAllPhotos() => (select(
-    climbPhotos,
-  )..orderBy([(p) => OrderingTerm(expression: p.sortOrder)])).watch();
+  Stream<List<ClimbPhoto>> watchAllPhotos() =>
+      (select(climbPhotos)
+            ..where((p) => p.isDeleted.equals(false))
+            ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
+          .watch();
 
   Future<List<ClimbPhoto>> getClimbPhotos(int climbId) =>
       (select(climbPhotos)
-            ..where((p) => p.climbId.equals(climbId))
+            ..where((p) => p.climbId.equals(climbId) & p.isDeleted.equals(false))
             ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
           .get();
 
@@ -154,15 +223,37 @@ class AppDatabase extends _$AppDatabase {
       );
 
   Future<int> deleteClimbPhoto(int id) =>
-      (delete(climbPhotos)..where((p) => p.id.equals(id))).go();
+      (update(climbPhotos)..where((p) => p.id.equals(id)))
+          .write(_photoTombstone(DateTime.now()));
 
   /// エクスポート用に全記録を新しい順で取得。
   Future<List<Climb>> getAllClimbs() =>
-      (select(climbs)..orderBy([
-            (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
-          ]))
+      (select(climbs)
+            ..where((c) => c.isDeleted.equals(false))
+            ..orderBy([
+              (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
+            ]))
           .get();
 }
+
+// 論理削除用の Companion（write() に渡して使う）。テーブルごとに型が異なる。
+GymsCompanion _gymTombstone(DateTime now) => GymsCompanion(
+  isDeleted: const Value(true),
+  dirty: const Value(true),
+  updatedAt: Value(now),
+);
+
+ClimbsCompanion _climbTombstone(DateTime now) => ClimbsCompanion(
+  isDeleted: const Value(true),
+  dirty: const Value(true),
+  updatedAt: Value(now),
+);
+
+ClimbPhotosCompanion _photoTombstone(DateTime now) => ClimbPhotosCompanion(
+  isDeleted: const Value(true),
+  dirty: const Value(true),
+  updatedAt: Value(now),
+);
 
 QueryExecutor _openConnection() {
   return driftDatabase(name: 'climb_log');
