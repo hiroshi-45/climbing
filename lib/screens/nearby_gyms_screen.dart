@@ -60,7 +60,9 @@ class _NearbyGymsScreenState extends ConsumerState<NearbyGymsScreen> {
         _error = e.message;
         _loading = false;
       });
-    } catch (_) {
+    } catch (e, st) {
+      debugPrint('[nearby] search failed: $e');
+      debugPrint('$st');
       if (!mounted) return;
       setState(() {
         _error = '施設の検索に失敗しました。通信環境を確認して再試行してください。';

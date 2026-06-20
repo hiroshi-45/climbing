@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:geolocator/geolocator.dart';
@@ -51,6 +52,10 @@ class NearbyGymService {
 
   static const _endpoint = 'https://overpass-api.de/api/interpreter';
 
+  /// Overpass はデフォルトの User-Agent (Dart/dart:io) を 406 で拒否するため、
+  /// アプリを識別する UA を必ず付与する（OSM 利用ポリシーの要請でもある）。
+  static const _userAgent = 'climb_log/1.0 (com.maruno.climb_log)';
+
   /// 現在地を取得する。サービス無効・権限拒否時は [LocationException] を投げる。
   static Future<Position> currentPosition() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -73,9 +78,21 @@ class NearbyGymService {
       );
     }
 
-    return Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
-    );
+    try {
+      return await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 15),
+        ),
+      );
+    } on TimeoutException {
+      // GPS の初回測位が遅い端末向けのフォールバック。
+      final last = await Geolocator.getLastKnownPosition();
+      if (last != null) return last;
+      throw const LocationException(
+        '現在地を取得できませんでした。電波の良い場所で再試行してください。',
+      );
+    }
   }
 
   /// [center] を中心に [radiusMeters] 以内のクライミング施設を距離順で返す。
@@ -98,7 +115,10 @@ class NearbyGymService {
 
     final res = await http.post(
       Uri.parse(_endpoint),
-      headers: const {'Content-Type': 'application/x-www-form-urlencoded'},
+      headers: const {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': _userAgent,
+      },
       body: {'data': query},
     );
     if (res.statusCode != 200) {
