@@ -6,6 +6,7 @@ import '../providers.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_widgets.dart';
 import 'gym_form_screen.dart';
+import 'nearby_gyms_screen.dart';
 
 const gradeSystemLabels = {'grade': '級 / 段', 'color': '色テープ', 'v': 'V グレード'};
 
@@ -16,7 +17,18 @@ class GymsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gyms = ref.watch(gymsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('ジム')),
+      appBar: AppBar(
+        title: const Text('ジム'),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const NearbyGymsScreen()),
+            ),
+            icon: const Icon(Icons.travel_explore),
+            tooltip: '近くのジムを探す',
+          ),
+        ],
+      ),
       floatingActionButton: _GradientFab(
         label: 'ジムを追加',
         onPressed: () => Navigator.of(
@@ -207,6 +219,14 @@ class _EmptyGyms extends StatelessWidget {
             const Text(
               '右下の「ジムを追加」から登録できます',
               style: TextStyle(color: AppPalette.textMid),
+            ),
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const NearbyGymsScreen()),
+              ),
+              icon: const Icon(Icons.travel_explore),
+              label: const Text('近くのジムを探す'),
             ),
           ],
         ),

@@ -4,6 +4,8 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>現在地の周辺にあるボルダリング施設を地図に表示するために位置情報を使用します。</string>
 	<key>NSCameraUsageDescription</key>
 	<string>登攀した課題の写真を撮影して記録に添付するために使用します。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
