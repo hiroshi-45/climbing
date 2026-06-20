@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Climb Log の同期データ用 Firestore セキュリティルール。
+//
+// データは全てユーザー単位（/users/{uid}/...）に隔離し、本人のみ読み書き可能。
+// 同期エンジン（SyncService）は /users/{uid}/{collection}/{syncId} に
+// gyms / wallTypes / climbs のドキュメントを upsert する。
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 自分のサブコレクション配下のみ許可（gyms / wallTypes / climbs を一括でカバー）。
+    match /users/{userId}/{collection}/{docId} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == userId;
+    }
+
+    // 上記以外は全て拒否（明示）。
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
