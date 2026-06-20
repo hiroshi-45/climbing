@@ -1,0 +1,13 @@
+# Android リリース署名設定のテンプレート。
+# このファイルを `key.properties` にコピーし、各値を実際の鍵情報に置き換えてください。
+# （key.properties と鍵ファイル(.jks)は .gitignore 済み。絶対にコミットしないこと）
+#
+# アップロード鍵の作成例:
+#   keytool -genkey -v -keystore ~/climb-upload.jks \
+#     -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+
+storePassword=ここにキーストアのパスワード
+keyPassword=ここに鍵のパスワード
+keyAlias=upload
+# 鍵ファイルへのパス（絶対パス推奨。例: /Users/you/climb-upload.jks）
+storeFile=/absolute/path/to/climb-upload.jks

@@ -51,8 +51,10 @@ class _LockedStats extends StatelessWidget {
               children: [
                 const Icon(Icons.lock_outline, size: 40),
                 const SizedBox(height: 12),
-                Text('詳しい分析はプレミアムで',
-                    style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  '詳しい分析はプレミアムで',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 const SizedBox(height: 8),
                 const Text(
                   '月別の完登推移・グレード別成功率・苦手な壁の分析を解放できます。',
@@ -85,8 +87,10 @@ class _StatsDashboard extends StatelessWidget {
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(32),
-          child: Text('記録が貯まると、ここに分析が表示されます',
-              style: TextStyle(color: Colors.grey)),
+          child: Text(
+            '記録が貯まると、ここに分析が表示されます',
+            style: TextStyle(color: Colors.grey),
+          ),
         ),
       );
     }
@@ -146,14 +150,14 @@ class _Metric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value,
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          value,
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 4),
-        Text(label,
-            style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
       ],
     );
   }
@@ -165,11 +169,12 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        style: Theme.of(context)
-            .textTheme
-            .titleMedium
-            ?.copyWith(fontWeight: FontWeight.bold));
+    return Text(
+      text,
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+    );
   }
 }
 
@@ -179,8 +184,7 @@ class _MonthlyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxSends =
-        monthly.fold<int>(1, (m, e) => e.sends > m ? e.sends : m);
+    final maxSends = monthly.fold<int>(1, (m, e) => e.sends > m ? e.sends : m);
     final primary = Theme.of(context).colorScheme.primary;
 
     return SizedBox(
@@ -201,12 +205,15 @@ class _MonthlyChart extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: primary,
                     borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(4)),
+                      top: Radius.circular(4),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text('${m.month}月',
-                    style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                Text(
+                  '${m.month}月',
+                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                ),
               ],
             ),
           );
@@ -230,10 +237,15 @@ class _RateRow extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: Text(stat.label,
-                      style: const TextStyle(fontWeight: FontWeight.w600))),
-              Text('${stat.ratePercent}%  (${stat.sends}/${stat.total})',
-                  style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                child: Text(
+                  stat.label,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+              Text(
+                '${stat.ratePercent}%  (${stat.sends}/${stat.total})',
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ],
           ),
           const SizedBox(height: 4),

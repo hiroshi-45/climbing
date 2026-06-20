@@ -61,8 +61,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   void _snack(String msg) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -74,19 +73,26 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Icon(Icons.workspace_premium,
-                size: 72, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.workspace_premium,
+              size: 72,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 16),
-            Text('Climb Log プレミアム',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'Climb Log プレミアム',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 24),
-            ..._benefits.map((b) => ListTile(
-                  leading: const Icon(Icons.check_circle, color: Colors.green),
-                  title: Text(b.$1),
-                  subtitle: Text(b.$2),
-                  contentPadding: EdgeInsets.zero,
-                )),
+            ..._benefits.map(
+              (b) => ListTile(
+                leading: const Icon(Icons.check_circle, color: Colors.green),
+                title: Text(b.$1),
+                subtitle: Text(b.$2),
+                contentPadding: EdgeInsets.zero,
+              ),
+            ),
             const SizedBox(height: 16),
             FutureBuilder<List<Package>>(
               future: _packagesFuture,
@@ -99,9 +105,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   return _UnavailableNotice(
                     onDebugUnlock: kDebugMode
                         ? () {
-                            ref
-                                .read(premiumProvider.notifier)
-                                .setPremium(true);
+                            ref.read(premiumProvider.notifier).setPremium(true);
                             Navigator.of(context).pop();
                           }
                         : null,
@@ -109,23 +113,23 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 }
                 return Column(
                   children: packages
-                      .map((p) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: FilledButton(
-                              onPressed: () => _buy(p),
-                              child: Text(
-                                  '${p.storeProduct.title} ・ ${p.storeProduct.priceString}'),
+                      .map(
+                        (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: FilledButton(
+                            onPressed: () => _buy(p),
+                            child: Text(
+                              '${p.storeProduct.title} ・ ${p.storeProduct.priceString}',
                             ),
-                          ))
+                          ),
+                        ),
+                      )
                       .toList(),
                 );
               },
             ),
             const SizedBox(height: 8),
-            TextButton(
-              onPressed: _restore,
-              child: const Text('購入を復元'),
-            ),
+            TextButton(onPressed: _restore, child: const Text('購入を復元')),
           ],
         ),
       ),

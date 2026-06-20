@@ -57,8 +57,9 @@ final climbStatsProvider = Provider<ClimbStats>((ref) {
 });
 
 /// プレミアム（課金）権利の有無。RevenueCatの状態を反映する。
-final premiumProvider =
-    NotifierProvider<PremiumController, bool>(PremiumController.new);
+final premiumProvider = NotifierProvider<PremiumController, bool>(
+  PremiumController.new,
+);
 
 class PremiumController extends Notifier<bool> {
   @override

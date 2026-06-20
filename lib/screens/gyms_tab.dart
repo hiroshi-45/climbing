@@ -5,11 +5,7 @@ import '../data/app_database.dart';
 import '../providers.dart';
 import 'gym_form_screen.dart';
 
-const gradeSystemLabels = {
-  'grade': '級 / 段',
-  'color': '色テープ',
-  'v': 'V グレード',
-};
+const gradeSystemLabels = {'grade': '級 / 段', 'color': '色テープ', 'v': 'V グレード'};
 
 class GymsTab extends ConsumerWidget {
   const GymsTab({super.key});
@@ -20,9 +16,9 @@ class GymsTab extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('ジム')),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const GymFormScreen()),
-        ),
+        onPressed: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const GymFormScreen())),
         icon: const Icon(Icons.add),
         label: const Text('ジムを追加'),
       ),
@@ -60,9 +56,9 @@ class _GymTile extends StatelessWidget {
       title: Text(gym.name),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => GymFormScreen(gym: gym)),
-      ),
+      onTap: () => Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => GymFormScreen(gym: gym))),
     );
   }
 }
@@ -80,11 +76,15 @@ class _EmptyGyms extends StatelessWidget {
           children: [
             const Icon(Icons.store_outlined, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
-            Text('通うジムを登録しましょう',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              '通うジムを登録しましょう',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
-            const Text('右下の「ジムを追加」から登録できます',
-                style: TextStyle(color: Colors.grey)),
+            const Text(
+              '右下の「ジムを追加」から登録できます',
+              style: TextStyle(color: Colors.grey),
+            ),
           ],
         ),
       ),

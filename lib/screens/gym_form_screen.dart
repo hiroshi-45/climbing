@@ -44,19 +44,23 @@ class _GymFormScreenState extends ConsumerState<GymFormScreen> {
     final db = ref.read(databaseProvider);
     final location = _location.text.trim();
     if (_isEdit) {
-      await db.updateGym(GymsCompanion(
-        id: Value(widget.gym!.id),
-        name: Value(_name.text.trim()),
-        location: Value(location.isEmpty ? null : location),
-        gradeSystem: Value(_gradeSystem),
-        createdAt: Value(widget.gym!.createdAt),
-      ));
+      await db.updateGym(
+        GymsCompanion(
+          id: Value(widget.gym!.id),
+          name: Value(_name.text.trim()),
+          location: Value(location.isEmpty ? null : location),
+          gradeSystem: Value(_gradeSystem),
+          createdAt: Value(widget.gym!.createdAt),
+        ),
+      );
     } else {
-      await db.insertGym(GymsCompanion(
-        name: Value(_name.text.trim()),
-        location: Value(location.isEmpty ? null : location),
-        gradeSystem: Value(_gradeSystem),
-      ));
+      await db.insertGym(
+        GymsCompanion(
+          name: Value(_name.text.trim()),
+          location: Value(location.isEmpty ? null : location),
+          gradeSystem: Value(_gradeSystem),
+        ),
+      );
     }
     if (mounted) Navigator.of(context).pop();
   }
@@ -69,11 +73,13 @@ class _GymFormScreenState extends ConsumerState<GymFormScreen> {
         content: const Text('このジムと、ひも付く登攀記録もすべて削除されます。よろしいですか？'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('キャンセル')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('キャンセル'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('削除')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('削除'),
+          ),
         ],
       ),
     );
@@ -128,10 +134,9 @@ class _GymFormScreenState extends ConsumerState<GymFormScreen> {
                 border: OutlineInputBorder(),
               ),
               items: gradeSystemLabels.entries
-                  .map((e) => DropdownMenuItem(
-                        value: e.key,
-                        child: Text(e.value),
-                      ))
+                  .map(
+                    (e) => DropdownMenuItem(value: e.key, child: Text(e.value)),
+                  )
                   .toList(),
               onChanged: (v) => setState(() => _gradeSystem = v ?? 'grade'),
             ),

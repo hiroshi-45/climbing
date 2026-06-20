@@ -14,10 +14,12 @@ void main() {
         overrides: [
           gymsProvider.overrideWith((ref) => Stream.value(const <Gym>[])),
           climbsProvider.overrideWith((ref) => Stream.value(const <Climb>[])),
-          wallTypesProvider
-              .overrideWith((ref) => Stream.value(const <WallType>[])),
-          allPhotosProvider
-              .overrideWith((ref) => Stream.value(const <ClimbPhoto>[])),
+          wallTypesProvider.overrideWith(
+            (ref) => Stream.value(const <WallType>[]),
+          ),
+          allPhotosProvider.overrideWith(
+            (ref) => Stream.value(const <ClimbPhoto>[]),
+          ),
         ],
         child: const ClimbLogApp(),
       ),
@@ -33,14 +35,14 @@ void main() {
     final db = AppDatabase.forTesting(NativeDatabase.memory());
     addTearDown(db.close);
 
-    final gymId = await db.insertGym(
-      GymsCompanion.insert(name: 'テストジム'),
+    final gymId = await db.insertGym(GymsCompanion.insert(name: 'テストジム'));
+    await db.insertClimb(
+      ClimbsCompanion.insert(
+        gymId: gymId,
+        date: DateTime(2026, 6, 20),
+        grade: '二級',
+      ),
     );
-    await db.insertClimb(ClimbsCompanion.insert(
-      gymId: gymId,
-      date: DateTime(2026, 6, 20),
-      grade: '二級',
-    ));
 
     final climbs = await db.watchClimbs().first;
     expect(climbs, hasLength(1));
@@ -57,11 +59,13 @@ void main() {
     addTearDown(db.close);
 
     final gymId = await db.insertGym(GymsCompanion.insert(name: 'G'));
-    final climbId = await db.insertClimb(ClimbsCompanion.insert(
-      gymId: gymId,
-      date: DateTime(2026, 6, 20),
-      grade: 'V3',
-    ));
+    final climbId = await db.insertClimb(
+      ClimbsCompanion.insert(
+        gymId: gymId,
+        date: DateTime(2026, 6, 20),
+        grade: 'V3',
+      ),
+    );
 
     await db.insertClimbPhoto(climbId, '/tmp/a.jpg', 0);
     await db.insertClimbPhoto(climbId, '/tmp/b.jpg', 1);

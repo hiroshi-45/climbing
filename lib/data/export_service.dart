@@ -15,8 +15,7 @@ Future<File> buildClimbsCsv(
   Map<int, WallType> walls,
 ) async {
   final dateFmt = DateFormat('yyyy-MM-dd');
-  final buf = StringBuffer()
-    ..writeln('日付,ジム,グレード,壁,トライ数,完登,メモ');
+  final buf = StringBuffer()..writeln('日付,ジム,グレード,壁,トライ数,完登,メモ');
 
   for (final c in climbs) {
     final cells = [
@@ -32,8 +31,9 @@ Future<File> buildClimbsCsv(
   }
 
   final dir = await getTemporaryDirectory();
-  final file = File(p.join(
-      dir.path, 'climb_log_${DateTime.now().millisecondsSinceEpoch}.csv'));
+  final file = File(
+    p.join(dir.path, 'climb_log_${DateTime.now().millisecondsSinceEpoch}.csv'),
+  );
   await file.writeAsString('﻿$buf');
   return file;
 }

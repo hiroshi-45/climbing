@@ -47,8 +47,8 @@ class _ClimbsTabState extends ConsumerState<ClimbsTab> {
         onPressed: gyms.isEmpty
             ? _needGym
             : () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ClimbFormScreen()),
-                ),
+                MaterialPageRoute(builder: (_) => const ClimbFormScreen()),
+              ),
         icon: const Icon(Icons.add),
         label: const Text('記録する'),
       ),
@@ -66,9 +66,9 @@ class _ClimbsTabState extends ConsumerState<ClimbsTab> {
   }
 
   void _needGym() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('先に「ジム」タブでジムを登録してください')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('先に「ジム」タブでジムを登録してください')));
   }
 
   Future<void> _export() async {
@@ -80,18 +80,20 @@ class _ClimbsTabState extends ConsumerState<ClimbsTab> {
           content: const Text('記録をCSVで書き出して、バックアップや共有ができます。'),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('閉じる')),
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('閉じる'),
+            ),
             FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('プレミアムを見る')),
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('プレミアムを見る'),
+            ),
           ],
         ),
       );
       if (go == true && mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const PaywallScreen()),
-        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const PaywallScreen()));
       }
       return;
     }
@@ -100,9 +102,9 @@ class _ClimbsTabState extends ConsumerState<ClimbsTab> {
     final climbs = await db.getAllClimbs();
     if (climbs.isEmpty) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('エクスポートする記録がありません')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('エクスポートする記録がありません')));
       }
       return;
     }
@@ -147,14 +149,17 @@ class _ClimbList extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
               child: Row(
                 children: [
-                  Text(dateFmt.format(date),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(
+                    dateFmt.format(date),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const Spacer(),
-                  Text('完登 $sentCount / ${dayClimbs.length}',
-                      style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text(
+                    '完登 $sentCount / ${dayClimbs.length}',
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ],
               ),
             ),
@@ -237,7 +242,9 @@ class _ClimbCalendarState extends State<_ClimbCalendar> {
               shape: BoxShape.circle,
             ),
             todayDecoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
             selectedDecoration: BoxDecoration(
@@ -251,23 +258,29 @@ class _ClimbCalendarState extends State<_ClimbCalendar> {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
           child: Row(
             children: [
-              Text(headerFmt.format(selected),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                headerFmt.format(selected),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               if (dayClimbs.isNotEmpty)
-                Text('完登 ${dayClimbs.where((c) => c.isSent).length} / ${dayClimbs.length}',
-                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(
+                  '完登 ${dayClimbs.where((c) => c.isSent).length} / ${dayClimbs.length}',
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ),
             ],
           ),
         ),
         Expanded(
           child: dayClimbs.isEmpty
               ? const Center(
-                  child: Text('この日の記録はありません',
-                      style: TextStyle(color: Colors.grey)))
+                  child: Text(
+                    'この日の記録はありません',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )
               : ListView(
                   padding: const EdgeInsets.only(bottom: 88),
                   children: dayClimbs.map((c) => ClimbItem(climb: c)).toList(),
@@ -288,7 +301,9 @@ class ClimbItem extends ConsumerWidget {
     final gymMap = ref.watch(gymMapProvider);
     final wallMap = ref.watch(wallTypeMapProvider);
     final photos = ref.watch(photosByClimbProvider)[climb.id];
-    final wallType = climb.wallTypeId == null ? null : wallMap[climb.wallTypeId];
+    final wallType = climb.wallTypeId == null
+        ? null
+        : wallMap[climb.wallTypeId];
 
     final meta = [
       gymMap[climb.gymId]?.name ?? '(削除されたジム)',
@@ -303,33 +318,44 @@ class ClimbItem extends ConsumerWidget {
       leading: hasPhoto
           ? ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.file(File(photos.first.path),
-                  width: 48, height: 48, fit: BoxFit.cover),
+              child: Image.file(
+                File(photos.first.path),
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
             )
           : CircleAvatar(
               backgroundColor: climb.isSent
                   ? Colors.green.shade100
                   : Colors.grey.shade200,
-              child: Text(climb.grade,
-                  style: const TextStyle(fontSize: 12),
-                  overflow: TextOverflow.ellipsis),
+              child: Text(
+                climb.grade,
+                style: const TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
       title: Row(
         children: [
-          Text(climb.grade,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            climb.grade,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(width: 8),
           if (climb.isSent)
             const Icon(Icons.check_circle, color: Colors.green, size: 18)
           else
-            Icon(Icons.radio_button_unchecked,
-                color: Colors.grey.shade400, size: 18),
+            Icon(
+              Icons.radio_button_unchecked,
+              color: Colors.grey.shade400,
+              size: 18,
+            ),
         ],
       ),
       subtitle: Text(meta),
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => ClimbFormScreen(climb: climb)),
-      ),
+      onTap: () => Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => ClimbFormScreen(climb: climb))),
     );
   }
 }
@@ -347,12 +373,13 @@ class _EmptyClimbs extends StatelessWidget {
           children: [
             const Icon(Icons.terrain_outlined, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
-            Text('まだ記録がありません',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text('まだ記録がありません', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            const Text('右下の「記録する」から登攀を記録しましょう',
-                style: TextStyle(color: Colors.grey),
-                textAlign: TextAlign.center),
+            const Text(
+              '右下の「記録する」から登攀を記録しましょう',
+              style: TextStyle(color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

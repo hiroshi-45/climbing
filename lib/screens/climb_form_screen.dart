@@ -70,7 +70,9 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
   }
 
   Future<void> _loadExistingPhotos() async {
-    final rows = await ref.read(databaseProvider).getClimbPhotos(widget.climb!.id);
+    final rows = await ref
+        .read(databaseProvider)
+        .getClimbPhotos(widget.climb!.id);
     if (!mounted) return;
     setState(() {
       _photos
@@ -95,8 +97,15 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
       locale: const Locale('ja'),
     );
     if (picked != null) {
-      setState(() => _date = DateTime(
-          picked.year, picked.month, picked.day, _date.hour, _date.minute));
+      setState(
+        () => _date = DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          _date.hour,
+          _date.minute,
+        ),
+      );
     }
   }
 
@@ -108,7 +117,10 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
     }
     final picker = ImagePicker();
     final picked = await picker.pickImage(
-        source: source, maxWidth: 1600, imageQuality: 85);
+      source: source,
+      maxWidth: 1600,
+      imageQuality: 85,
+    );
     if (picked == null) return;
     final saved = await savePhoto(picked.path);
     if (mounted) setState(() => _photos.add(_PhotoDraft(path: saved)));
@@ -130,26 +142,29 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
         content: const Text('プレミアムにすると1つの課題に何枚でも写真を残せます。'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('閉じる')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('閉じる'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('プレミアムを見る')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('プレミアムを見る'),
+          ),
         ],
       ),
     );
     if (go == true && mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const PaywallScreen()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const PaywallScreen()));
     }
   }
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     if (_gymId == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('ジムを選択してください')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ジムを選択してください')));
       return;
     }
     setState(() => _saving = true);
@@ -159,27 +174,31 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
     int climbId;
     if (_isEdit) {
       climbId = widget.climb!.id;
-      await db.updateClimb(ClimbsCompanion(
-        id: Value(climbId),
-        gymId: Value(_gymId!),
-        date: Value(_date),
-        grade: Value(_grade.text.trim()),
-        wallTypeId: Value(_wallTypeId),
-        attempts: Value(_attempts),
-        isSent: Value(_isSent),
-        memo: Value(memo.isEmpty ? null : memo),
-        createdAt: Value(widget.climb!.createdAt),
-      ));
+      await db.updateClimb(
+        ClimbsCompanion(
+          id: Value(climbId),
+          gymId: Value(_gymId!),
+          date: Value(_date),
+          grade: Value(_grade.text.trim()),
+          wallTypeId: Value(_wallTypeId),
+          attempts: Value(_attempts),
+          isSent: Value(_isSent),
+          memo: Value(memo.isEmpty ? null : memo),
+          createdAt: Value(widget.climb!.createdAt),
+        ),
+      );
     } else {
-      climbId = await db.insertClimb(ClimbsCompanion(
-        gymId: Value(_gymId!),
-        date: Value(_date),
-        grade: Value(_grade.text.trim()),
-        wallTypeId: Value(_wallTypeId),
-        attempts: Value(_attempts),
-        isSent: Value(_isSent),
-        memo: Value(memo.isEmpty ? null : memo),
-      ));
+      climbId = await db.insertClimb(
+        ClimbsCompanion(
+          gymId: Value(_gymId!),
+          date: Value(_date),
+          grade: Value(_grade.text.trim()),
+          wallTypeId: Value(_wallTypeId),
+          attempts: Value(_attempts),
+          isSent: Value(_isSent),
+          memo: Value(memo.isEmpty ? null : memo),
+        ),
+      );
     }
 
     // 削除された既存写真の行を削除
@@ -209,11 +228,13 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
         content: const Text('この登攀記録を削除しますか？'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('キャンセル')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('キャンセル'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('削除')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('削除'),
+          ),
         ],
       ),
     );
@@ -241,9 +262,10 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
         actions: [
           if (_isEdit)
             IconButton(
-                onPressed: _delete,
-                icon: const Icon(Icons.delete_outline),
-                tooltip: '削除'),
+              onPressed: _delete,
+              icon: const Icon(Icons.delete_outline),
+              tooltip: '削除',
+            ),
         ],
       ),
       body: Form(
@@ -258,8 +280,9 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
                 border: OutlineInputBorder(),
               ),
               items: gyms
-                  .map((g) =>
-                      DropdownMenuItem(value: g.id, child: Text(g.name)))
+                  .map(
+                    (g) => DropdownMenuItem(value: g.id, child: Text(g.name)),
+                  )
                   .toList(),
               onChanged: (v) => setState(() => _gymId = v),
               validator: (v) => v == null ? 'ジムを選択してください' : null,
@@ -295,8 +318,9 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
               ),
               items: [
                 const DropdownMenuItem(value: null, child: Text('未指定')),
-                ...wallTypes.map((w) =>
-                    DropdownMenuItem(value: w.id, child: Text(w.name))),
+                ...wallTypes.map(
+                  (w) => DropdownMenuItem(value: w.id, child: Text(w.name)),
+                ),
               ],
               onChanged: (v) => setState(() => _wallTypeId = v),
             ),
@@ -306,14 +330,17 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
                 const Text('トライ数'),
                 const Spacer(),
                 IconButton.filledTonal(
-                  onPressed:
-                      _attempts > 1 ? () => setState(() => _attempts--) : null,
+                  onPressed: _attempts > 1
+                      ? () => setState(() => _attempts--)
+                      : null,
                   icon: const Icon(Icons.remove),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('$_attempts',
-                      style: Theme.of(context).textTheme.titleLarge),
+                  child: Text(
+                    '$_attempts',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
                 IconButton.filledTonal(
                   onPressed: () => setState(() => _attempts++),
@@ -381,8 +408,10 @@ class _PhotoGallery extends StatelessWidget {
             const Text('写真', style: TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(width: 8),
             if (!isPremium)
-              Text('（無料は1枚まで）',
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+              Text(
+                '（無料は1枚まで）',
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+              ),
           ],
         ),
         const SizedBox(height: 8),
@@ -391,18 +420,20 @@ class _PhotoGallery extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              ...photos.asMap().entries.map((e) => _Thumb(
-                    path: e.value.path,
-                    onRemove: () => onRemove(e.value),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => PhotoViewerScreen(
-                          paths: photos.map((p) => p.path).toList(),
-                          initialIndex: e.key,
-                        ),
+              ...photos.asMap().entries.map(
+                (e) => _Thumb(
+                  path: e.value.path,
+                  onRemove: () => onRemove(e.value),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => PhotoViewerScreen(
+                        paths: photos.map((p) => p.path).toList(),
+                        initialIndex: e.key,
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              ),
               _AddButtons(onAdd: onAdd),
             ],
           ),
@@ -413,8 +444,11 @@ class _PhotoGallery extends StatelessWidget {
 }
 
 class _Thumb extends StatelessWidget {
-  const _Thumb(
-      {required this.path, required this.onRemove, required this.onTap});
+  const _Thumb({
+    required this.path,
+    required this.onRemove,
+    required this.onTap,
+  });
   final String path;
   final VoidCallback onRemove;
   final VoidCallback onTap;
@@ -429,8 +463,12 @@ class _Thumb extends StatelessWidget {
             onTap: onTap,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.file(File(path),
-                  width: 96, height: 96, fit: BoxFit.cover),
+              child: Image.file(
+                File(path),
+                width: 96,
+                height: 96,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
@@ -460,22 +498,27 @@ class _AddButtons extends StatelessWidget {
     return Row(
       children: [
         _AddTile(
-            icon: Icons.photo_camera_outlined,
-            label: '撮影',
-            onTap: () => onAdd(ImageSource.camera)),
+          icon: Icons.photo_camera_outlined,
+          label: '撮影',
+          onTap: () => onAdd(ImageSource.camera),
+        ),
         const SizedBox(width: 8),
         _AddTile(
-            icon: Icons.photo_library_outlined,
-            label: '選択',
-            onTap: () => onAdd(ImageSource.gallery)),
+          icon: Icons.photo_library_outlined,
+          label: '選択',
+          onTap: () => onAdd(ImageSource.gallery),
+        ),
       ],
     );
   }
 }
 
 class _AddTile extends StatelessWidget {
-  const _AddTile(
-      {required this.icon, required this.label, required this.onTap});
+  const _AddTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -497,8 +540,10 @@ class _AddTile extends StatelessWidget {
           children: [
             Icon(icon, color: Colors.grey.shade700),
             const SizedBox(height: 4),
-            Text(label,
-                style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+            Text(
+              label,
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+            ),
           ],
         ),
       ),
