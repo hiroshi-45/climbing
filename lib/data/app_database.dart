@@ -67,6 +67,15 @@ class ClimbPhotos extends Table with _SyncColumns {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+/// 同期エンジンのメタデータ（コレクションごとの pull カーソル等）を保持する。
+class SyncMeta extends Table {
+  TextColumn get key => text()();
+  DateTimeColumn get value => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
 /// デフォルト壁種別。端末間で重複登録されないよう syncId を固定する
 /// （別端末でも同じ syncId で seed されるため、同期時に同一行として扱える）。
 const _defaultWallTypes = <(String, String)>[
@@ -76,13 +85,13 @@ const _defaultWallTypes = <(String, String)>[
   ('seed-wall-roof', 'ルーフ'),
 ];
 
-@DriftDatabase(tables: [Gyms, WallTypes, Climbs, ClimbPhotos])
+@DriftDatabase(tables: [Gyms, WallTypes, Climbs, ClimbPhotos, SyncMeta])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -93,11 +102,14 @@ class AppDatabase extends _$AppDatabase {
     onUpgrade: (m, from, to) async {
       if (from < 3) {
         // 同期対応スキーマへ移行。旧データは破棄して作り直す（ユーザー許諾済み）。
+        // createAll が SyncMeta を含む全テーブルを作るため v4 まで一括で満たす。
         for (final t in allTables) {
           await customStatement('DROP TABLE IF EXISTS ${t.actualTableName}');
         }
         await m.createAll();
         await _seedWallTypes();
+      } else if (from < 4) {
+        await m.createTable(syncMeta);
       }
     },
     beforeOpen: (details) async {
@@ -234,6 +246,84 @@ class AppDatabase extends _$AppDatabase {
               (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
             ]))
           .get();
+
+  // ========================================================================
+  // 同期エンジン（SyncService）向けのプリミティブ。
+  // 論理削除行も含めて扱う点が UI 向けクエリと異なる（tombstone を push するため）。
+  // ========================================================================
+
+  // --- 未同期（dirty）行の取得 ---
+  Future<List<Gym>> dirtyGyms() =>
+      (select(gyms)..where((g) => g.dirty.equals(true))).get();
+  Future<List<WallType>> dirtyWallTypes() =>
+      (select(wallTypes)..where((w) => w.dirty.equals(true))).get();
+  Future<List<Climb>> dirtyClimbs() =>
+      (select(climbs)..where((c) => c.dirty.equals(true))).get();
+
+  // --- FK 解決用：論理削除を含む全行 ---
+  Future<List<Gym>> allGymsRaw() => select(gyms).get();
+  Future<List<WallType>> allWallTypesRaw() => select(wallTypes).get();
+
+  // --- syncId による参照（論理削除を含む） ---
+  Future<Gym?> gymBySyncId(String syncId) =>
+      (select(gyms)..where((g) => g.syncId.equals(syncId))).getSingleOrNull();
+  Future<WallType?> wallTypeBySyncId(String syncId) => (select(
+    wallTypes,
+  )..where((w) => w.syncId.equals(syncId))).getSingleOrNull();
+  Future<Climb?> climbBySyncId(String syncId) =>
+      (select(climbs)..where((c) => c.syncId.equals(syncId))).getSingleOrNull();
+
+  // --- リモート反映（syncId 衝突で upsert）。LWW 判定は呼び出し側で行う ---
+  Future<void> upsertGymFromRemote(GymsCompanion data) => into(gyms).insert(
+    data,
+    onConflict: DoUpdate((_) => data, target: [gyms.syncId]),
+  );
+  Future<void> upsertWallTypeFromRemote(WallTypesCompanion data) =>
+      into(wallTypes).insert(
+        data,
+        onConflict: DoUpdate((_) => data, target: [wallTypes.syncId]),
+      );
+  Future<void> upsertClimbFromRemote(ClimbsCompanion data) => into(climbs).insert(
+    data,
+    onConflict: DoUpdate((_) => data, target: [climbs.syncId]),
+  );
+
+  // --- push 成功後の dirty 解除。push 後に再編集された行を誤って解除しないよう
+  //     updatedAt 一致を条件にする ---
+  Future<void> markGymSynced(String syncId, DateTime pushedUpdatedAt) =>
+      (update(gyms)..where(
+            (g) =>
+                g.syncId.equals(syncId) & g.updatedAt.equals(pushedUpdatedAt),
+          ))
+          .write(const GymsCompanion(dirty: Value(false)));
+  Future<void> markWallTypeSynced(String syncId, DateTime pushedUpdatedAt) =>
+      (update(wallTypes)..where(
+            (w) =>
+                w.syncId.equals(syncId) & w.updatedAt.equals(pushedUpdatedAt),
+          ))
+          .write(const WallTypesCompanion(dirty: Value(false)));
+  Future<void> markClimbSynced(String syncId, DateTime pushedUpdatedAt) =>
+      (update(climbs)..where(
+            (c) =>
+                c.syncId.equals(syncId) & c.updatedAt.equals(pushedUpdatedAt),
+          ))
+          .write(const ClimbsCompanion(dirty: Value(false)));
+
+  // --- pull カーソル（コレクションごと） ---
+  Future<DateTime?> getSyncCursor(String collection) async {
+    final row = await (select(
+      syncMeta,
+    )..where((m) => m.key.equals('cursor:$collection'))).getSingleOrNull();
+    return row?.value;
+  }
+
+  Future<void> setSyncCursor(String collection, DateTime value) =>
+      into(syncMeta).insertOnConflictUpdate(
+        SyncMetaCompanion(key: Value('cursor:$collection'), value: Value(value)),
+      );
+
+  /// アカウント切替時などにローカルの同期状態を初期化する（カーソルを消す）。
+  Future<void> resetSyncCursors() => delete(syncMeta).go();
 }
 
 // 論理削除用の Companion（write() に渡して使う）。テーブルごとに型が異なる。
