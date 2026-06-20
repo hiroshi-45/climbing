@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../data/app_database.dart';
 import '../data/photo_storage.dart';
 import '../providers.dart';
+import '../theme/app_theme.dart';
 import 'paywall_screen.dart';
 import 'photo_viewer_screen.dart';
 
@@ -171,6 +172,9 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
     final db = ref.read(databaseProvider);
     final memo = _memo.text.trim();
 
+    // 新規完登、または「挑戦中→完登」へ切り替えた編集はお祝い対象。
+    final celebrate = _isSent && (!_isEdit || !widget.climb!.isSent);
+
     int climbId;
     if (_isEdit) {
       climbId = widget.climb!.id;
@@ -217,7 +221,7 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
       await deletePhoto(path);
     }
 
-    if (mounted) Navigator.of(context).pop();
+    if (mounted) Navigator.of(context).pop(celebrate);
   }
 
   Future<void> _delete() async {
@@ -289,13 +293,17 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
             ),
             const SizedBox(height: 16),
             ListTile(
+              tileColor: AppPalette.surfaceHigh,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey.shade400),
-                borderRadius: BorderRadius.circular(4),
+                side: const BorderSide(color: AppPalette.stroke),
+                borderRadius: BorderRadius.circular(14),
               ),
-              leading: const Icon(Icons.calendar_today),
+              leading: const Icon(
+                Icons.calendar_today,
+                color: AppPalette.sunsetMid,
+              ),
               title: Text(dateFmt.format(_date)),
-              trailing: const Icon(Icons.edit),
+              trailing: const Icon(Icons.edit, color: AppPalette.textMid),
               onTap: _pickDate,
             ),
             const SizedBox(height: 16),
@@ -532,17 +540,18 @@ class _AddTile extends StatelessWidget {
         width: 80,
         height: 96,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade400),
-          borderRadius: BorderRadius.circular(8),
+          color: AppPalette.surfaceHigh,
+          border: Border.all(color: AppPalette.stroke),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.grey.shade700),
+            Icon(icon, color: AppPalette.sunsetMid),
             const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+              style: const TextStyle(fontSize: 12, color: AppPalette.textMid),
             ),
           ],
         ),

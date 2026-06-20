@@ -32,6 +32,8 @@ class ClimbStats {
     required this.monthly,
     required this.grades,
     required this.walls,
+    this.currentStreak = 0,
+    this.activeDays = 0,
   });
 
   final int totalClimbs;
@@ -40,6 +42,12 @@ class ClimbStats {
   final List<MonthlyCount> monthly; // 古い→新しい順
   final List<RateStat> grades; // 記録数の多い順
   final List<RateStat> walls; // 完登率の低い順（＝苦手な壁が上）
+
+  /// 今日（または最後の記録日）から途切れず続く連続記録日数。
+  final int currentStreak;
+
+  /// 記録のある日数（ユニーク日付）。
+  final int activeDays;
 
   double get overallSendRate => totalClimbs == 0 ? 0 : totalSends / totalClimbs;
   int get overallSendPercent => (overallSendRate * 100).round();
@@ -52,6 +60,29 @@ class ClimbStats {
     grades: [],
     walls: [],
   );
+}
+
+/// 連続記録日数を計算する。最新の記録日が「今日」か「昨日」なら継続中とみなし、
+/// そこから1日刻みで途切れるまでさかのぼる。
+int _computeStreak(List<Climb> climbs, DateTime base) {
+  if (climbs.isEmpty) return 0;
+  final days = <DateTime>{
+    for (final c in climbs) DateTime(c.date.year, c.date.month, c.date.day),
+  };
+  final today = DateTime(base.year, base.month, base.day);
+  final yesterday = today.subtract(const Duration(days: 1));
+
+  var cursor = days.contains(today)
+      ? today
+      : (days.contains(yesterday) ? yesterday : null);
+  if (cursor == null) return 0; // 直近の記録が2日以上前なら継続は0
+
+  var streak = 0;
+  while (days.contains(cursor)) {
+    streak++;
+    cursor = cursor!.subtract(const Duration(days: 1));
+  }
+  return streak;
 }
 
 /// 登攀記録一覧から統計を計算する。
@@ -129,6 +160,10 @@ ClimbStats computeStats(
           .toList()
         ..sort((a, b) => a.rate.compareTo(b.rate)); // 苦手（低い）を上に
 
+  final activeDays = <DateTime>{
+    for (final c in climbs) DateTime(c.date.year, c.date.month, c.date.day),
+  }.length;
+
   return ClimbStats(
     totalClimbs: climbs.length,
     totalSends: totalSends,
@@ -136,5 +171,7 @@ ClimbStats computeStats(
     monthly: monthly,
     grades: grades,
     walls: walls,
+    currentStreak: _computeStreak(climbs, base),
+    activeDays: activeDays,
   );
 }

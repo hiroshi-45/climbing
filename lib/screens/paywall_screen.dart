@@ -6,6 +6,8 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../premium/purchase_service.dart';
 import '../providers.dart';
+import '../theme/app_theme.dart';
+import '../widgets/app_widgets.dart';
 
 const _benefits = [
   ('統計ダッシュボード', '月別の完登推移・グレード別成功率・苦手な壁の分析'),
@@ -70,30 +72,66 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       appBar: AppBar(title: const Text('プレミアム')),
       body: AbsorbPointer(
         absorbing: _busy,
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            Icon(
-              Icons.workspace_premium,
-              size: 72,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Climb Log プレミアム',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 24),
-            ..._benefits.map(
-              (b) => ListTile(
-                leading: const Icon(Icons.check_circle, color: Colors.green),
-                title: Text(b.$1),
-                subtitle: Text(b.$2),
-                contentPadding: EdgeInsets.zero,
+        child: AmbientBackground(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 28),
+                decoration: BoxDecoration(
+                  gradient: AppGradients.hero,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppPalette.sunsetMid.withValues(alpha: 0.35),
+                      blurRadius: 28,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
+                ),
+                child: const Column(
+                  children: [
+                    Icon(Icons.workspace_premium,
+                        size: 64, color: Colors.white),
+                    SizedBox(height: 12),
+                    Text(
+                      'Climb Log プレミアム',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'すべての機能を解放して、もっと登ろう',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              GlassCard(
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < _benefits.length; i++)
+                      ListTile(
+                        leading: const Icon(Icons.check_circle,
+                            color: AppPalette.sent),
+                        title: Text(
+                          _benefits[i].$1,
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        subtitle: Text(_benefits[i].$2),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
             FutureBuilder<List<Package>>(
               future: _packagesFuture,
               builder: (context, snap) {
@@ -128,9 +166,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 );
               },
             ),
-            const SizedBox(height: 8),
-            TextButton(onPressed: _restore, child: const Text('購入を復元')),
-          ],
+              const SizedBox(height: 8),
+              TextButton(onPressed: _restore, child: const Text('購入を復元')),
+            ],
+          ),
         ),
       ),
     );

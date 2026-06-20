@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers.dart';
 import '../stats/climb_stats.dart';
+import '../theme/app_theme.dart';
+import '../widgets/app_widgets.dart';
 import 'paywall_screen.dart';
 
 class StatsTab extends ConsumerWidget {
@@ -20,13 +22,15 @@ class StatsTab extends ConsumerWidget {
           if (isPremium)
             const Padding(
               padding: EdgeInsets.only(right: 16),
-              child: Icon(Icons.workspace_premium, color: Colors.amber),
+              child: Icon(Icons.workspace_premium, color: AppPalette.gold),
             ),
         ],
       ),
-      body: isPremium
-          ? _StatsDashboard(stats: stats)
-          : _LockedStats(stats: stats),
+      body: AmbientBackground(
+        child: isPremium
+            ? _StatsDashboard(stats: stats)
+            : _LockedStats(stats: stats),
+      ),
     );
   }
 }
@@ -39,40 +43,61 @@ class _LockedStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: [
         _SummaryCard(stats: stats),
         const SizedBox(height: 16),
-        Card(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                const Icon(Icons.lock_outline, size: 40),
-                const SizedBox(height: 12),
-                Text(
-                  '詳しい分析はプレミアムで',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '月別の完登推移・グレード別成功率・苦手な壁の分析を解放できます。',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                FilledButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PaywallScreen()),
-                  ),
-                  icon: const Icon(Icons.workspace_premium),
-                  label: const Text('プレミアムを見る'),
-                ),
-              ],
+        _PremiumPromo(),
+      ],
+    );
+  }
+}
+
+class _PremiumPromo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      gradientBorder: true,
+      padding: const EdgeInsets.all(22),
+      child: Column(
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: const BoxDecoration(
+              gradient: AppGradients.sunset,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.insights, color: Colors.white, size: 32),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            '詳しい分析はプレミアムで',
+            style: TextStyle(
+              color: AppPalette.textHigh,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          const Text(
+            '月別の完登推移・グレード別成功率・苦手な壁の分析を解放できます。',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppPalette.textMid),
+          ),
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PaywallScreen()),
+              ),
+              icon: const Icon(Icons.workspace_premium),
+              label: const Text('プレミアムを見る'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -89,30 +114,47 @@ class _StatsDashboard extends StatelessWidget {
           padding: EdgeInsets.all(32),
           child: Text(
             '記録が貯まると、ここに分析が表示されます',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppPalette.textLow),
           ),
         ),
       );
     }
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: [
         _SummaryCard(stats: stats),
         const SizedBox(height: 24),
         _SectionTitle('月別の完登数'),
-        const SizedBox(height: 8),
-        _MonthlyChart(monthly: stats.monthly),
+        const SizedBox(height: 12),
+        GlassCard(child: _MonthlyChart(monthly: stats.monthly)),
         const SizedBox(height: 24),
         _SectionTitle('グレード別の完登率'),
-        const SizedBox(height: 8),
-        ...stats.grades.map((g) => _RateRow(stat: g)),
+        const SizedBox(height: 12),
+        GlassCard(
+          child: Column(
+            children: [
+              for (var i = 0; i < stats.grades.length; i++) ...[
+                if (i > 0) const SizedBox(height: 14),
+                _RateRow(stat: stats.grades[i]),
+              ],
+            ],
+          ),
+        ),
         if (stats.walls.isNotEmpty) ...[
           const SizedBox(height: 24),
           _SectionTitle('壁の種類別の完登率（苦手な順）'),
-          const SizedBox(height: 8),
-          ...stats.walls.map((w) => _RateRow(stat: w)),
+          const SizedBox(height: 12),
+          GlassCard(
+            child: Column(
+              children: [
+                for (var i = 0; i < stats.walls.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 14),
+                  _RateRow(stat: stats.walls[i], rankWeak: i == 0),
+                ],
+              ],
+            ),
+          ),
         ],
-        const SizedBox(height: 24),
       ],
     );
   }
@@ -124,40 +166,60 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _Metric(value: '${stats.totalSends}', label: '完登'),
-            _Metric(value: '${stats.totalClimbs}', label: '記録'),
-            _Metric(value: '${stats.overallSendPercent}%', label: '完登率'),
-            _Metric(value: '${stats.totalAttempts}', label: '総トライ'),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 12),
+      decoration: BoxDecoration(
+        gradient: AppGradients.hero,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppPalette.sunsetMid.withValues(alpha: 0.3),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _Metric(value: stats.totalSends, label: '完登'),
+          _Metric(value: stats.totalClimbs, label: '記録'),
+          _Metric(value: stats.overallSendPercent, label: '完登率', suffix: '%'),
+          _Metric(value: stats.totalAttempts, label: '総トライ'),
+        ],
       ),
     );
   }
 }
 
 class _Metric extends StatelessWidget {
-  const _Metric({required this.value, required this.label});
-  final String value;
+  const _Metric({required this.value, required this.label, this.suffix = ''});
+  final int value;
   final String label;
+  final String suffix;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          value,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        AnimatedCounter(
+          value: value,
+          suffix: suffix,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 26,
+            fontWeight: FontWeight.w900,
+          ),
         ),
         const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.85),
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -171,9 +233,11 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(
-        context,
-      ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        color: AppPalette.textHigh,
+        fontSize: 16,
+        fontWeight: FontWeight.w800,
+      ),
     );
   }
 }
@@ -185,10 +249,9 @@ class _MonthlyChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxSends = monthly.fold<int>(1, (m, e) => e.sends > m ? e.sends : m);
-    final primary = Theme.of(context).colorScheme.primary;
 
     return SizedBox(
-      height: 160,
+      height: 168,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: monthly.map((m) {
@@ -197,22 +260,41 @@ class _MonthlyChart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('${m.sends}', style: const TextStyle(fontSize: 11)),
-                const SizedBox(height: 4),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  height: 110 * ratio + 2,
-                  decoration: BoxDecoration(
-                    color: primary,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(4),
+                Text(
+                  '${m.sends}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppPalette.textHigh,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: ratio),
+                  duration: const Duration(milliseconds: 900),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, v, _) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    height: 110 * v + 4,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [AppPalette.sunsetEnd, AppPalette.sunsetMid],
+                      ),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(6),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
                   '${m.month}月',
-                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppPalette.textLow,
+                  ),
                 ),
               ],
             ),
@@ -224,41 +306,82 @@ class _MonthlyChart extends StatelessWidget {
 }
 
 class _RateRow extends StatelessWidget {
-  const _RateRow({required this.stat});
+  const _RateRow({required this.stat, this.rankWeak = false});
   final RateStat stat;
+
+  /// 苦手ランク先頭を強調（オレンジ寄り）するか。
+  final bool rankWeak;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  stat.label,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            if (rankWeak)
+              const Padding(
+                padding: EdgeInsets.only(right: 6),
+                child: Icon(
+                  Icons.priority_high,
+                  size: 16,
+                  color: AppPalette.sunsetStart,
                 ),
               ),
-              Text(
-                '${stat.ratePercent}%  (${stat.sends}/${stat.total})',
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
+            Expanded(
+              child: Text(
+                stat.label,
+                style: const TextStyle(
+                  color: AppPalette.textHigh,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: stat.rate,
-              minHeight: 8,
-              backgroundColor: Colors.grey.shade200,
+            ),
+            Text(
+              '${stat.ratePercent}%',
+              style: const TextStyle(
+                color: AppPalette.textHigh,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              '(${stat.sends}/${stat.total})',
+              style: const TextStyle(color: AppPalette.textLow, fontSize: 12),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: stat.rate),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (context, v, _) => Stack(
+              children: [
+                Container(height: 10, color: AppPalette.surfaceHigh),
+                FractionallySizedBox(
+                  widthFactor: v.clamp(0.0, 1.0),
+                  child: Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      gradient: rankWeak
+                          ? const LinearGradient(
+                              colors: [
+                                AppPalette.sunsetStart,
+                                AppPalette.sunsetMid,
+                              ],
+                            )
+                          : AppGradients.sent,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
