@@ -104,8 +104,7 @@ class NearbyGymService {
     final lat = center.latitude;
     final lng = center.longitude;
     // クライミング系の主要タグを網羅して取得（node/way/relation）。
-    final query =
-        '[out:json][timeout:25];'
+    final query = '[out:json][timeout:25];'
         '('
         'nwr["sport"="climbing"](around:$r,$lat,$lng);'
         'nwr["leisure"="climbing"](around:$r,$lat,$lng);'
@@ -158,17 +157,15 @@ class NearbyGymService {
     final seen = <String>{};
     final deduped = <NearbyGym>[];
     for (final g in results) {
-      final key =
-          '${g.name}@${g.location.latitude.toStringAsFixed(4)},'
+      final key = '${g.name}@${g.location.latitude.toStringAsFixed(4)},'
           '${g.location.longitude.toStringAsFixed(4)}';
       if (seen.add(key)) deduped.add(g);
     }
 
     deduped.sort(
-      (a, b) =>
-          (a.distanceMeters ?? double.infinity).compareTo(
-            b.distanceMeters ?? double.infinity,
-          ),
+      (a, b) => (a.distanceMeters ?? double.infinity).compareTo(
+        b.distanceMeters ?? double.infinity,
+      ),
     );
     return deduped;
   }

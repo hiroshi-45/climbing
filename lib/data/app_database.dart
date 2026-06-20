@@ -45,10 +45,10 @@ class Climbs extends Table with _SyncColumns {
   // グレード文字列（体系に依存させず柔軟に保持: "二級", "赤", "V4" など）
   TextColumn get grade => text().withLength(min: 1, max: 20)();
   IntColumn get wallTypeId => integer().nullable().references(
-    WallTypes,
-    #id,
-    onDelete: KeyAction.setNull,
-  )();
+        WallTypes,
+        #id,
+        onDelete: KeyAction.setNull,
+      )();
   IntColumn get attempts => integer().withDefault(const Constant(1))();
   BoolColumn get isSent => boolean().withDefault(const Constant(false))();
   // 後方互換のため残置（v2以降は ClimbPhotos を使用）。
@@ -95,28 +95,29 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (m) async {
-      await m.createAll();
-      await _seedWallTypes();
-    },
-    onUpgrade: (m, from, to) async {
-      if (from < 3) {
-        // 同期対応スキーマへ移行。旧データは破棄して作り直す（ユーザー許諾済み）。
-        // createAll が SyncMeta を含む全テーブルを作るため v4 まで一括で満たす。
-        for (final t in allTables) {
-          await customStatement('DROP TABLE IF EXISTS ${t.actualTableName}');
-        }
-        await m.createAll();
-        await _seedWallTypes();
-      } else if (from < 4) {
-        await m.createTable(syncMeta);
-      }
-    },
-    beforeOpen: (details) async {
-      // ON DELETE CASCADE を効かせるため外部キー制約を有効化する
-      await customStatement('PRAGMA foreign_keys = ON');
-    },
-  );
+        onCreate: (m) async {
+          await m.createAll();
+          await _seedWallTypes();
+        },
+        onUpgrade: (m, from, to) async {
+          if (from < 3) {
+            // 同期対応スキーマへ移行。旧データは破棄して作り直す（ユーザー許諾済み）。
+            // createAll が SyncMeta を含む全テーブルを作るため v4 まで一括で満たす。
+            for (final t in allTables) {
+              await customStatement(
+                  'DROP TABLE IF EXISTS ${t.actualTableName}');
+            }
+            await m.createAll();
+            await _seedWallTypes();
+          } else if (from < 4) {
+            await m.createTable(syncMeta);
+          }
+        },
+        beforeOpen: (details) async {
+          // ON DELETE CASCADE を効かせるため外部キー制約を有効化する
+          await customStatement('PRAGMA foreign_keys = ON');
+        },
+      );
 
   /// デフォルト壁種別を投入する。固定 syncId・dirty=false で、標準データとして扱う。
   Future<void> _seedWallTypes() async {
@@ -133,23 +134,23 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // --- Gyms ---
-  Stream<List<Gym>> watchGyms() =>
-      (select(gyms)
-            ..where((g) => g.isDeleted.equals(false))
-            ..orderBy([(g) => OrderingTerm(expression: g.name)]))
-          .watch();
+  Stream<List<Gym>> watchGyms() => (select(gyms)
+        ..where((g) => g.isDeleted.equals(false))
+        ..orderBy([(g) => OrderingTerm(expression: g.name)]))
+      .watch();
 
   Future<Gym?> getGym(int id) => (select(
-    gyms,
-  )..where((g) => g.id.equals(id) & g.isDeleted.equals(false))).getSingleOrNull();
+        gyms,
+      )..where((g) => g.id.equals(id) & g.isDeleted.equals(false)))
+          .getSingleOrNull();
 
   Future<int> insertGym(GymsCompanion gym) => into(gyms).insert(gym);
 
   Future<bool> updateGym(GymsCompanion gym) async {
-    final n = await (update(gyms)..where((g) => g.id.equals(gym.id.value)))
-        .write(
-          gym.copyWith(updatedAt: Value(DateTime.now()), dirty: const Value(true)),
-        );
+    final n =
+        await (update(gyms)..where((g) => g.id.equals(gym.id.value))).write(
+      gym.copyWith(updatedAt: Value(DateTime.now()), dirty: const Value(true)),
+    );
     return n > 0;
   }
 
@@ -158,47 +159,48 @@ class AppDatabase extends _$AppDatabase {
     final now = DateTime.now();
     final climbIds = (await (select(
       climbs,
-    )..where((c) => c.gymId.equals(id))).get()).map((c) => c.id).toList();
+    )..where((c) => c.gymId.equals(id)))
+            .get())
+        .map((c) => c.id)
+        .toList();
     if (climbIds.isNotEmpty) {
       await (update(climbPhotos)..where((p) => p.climbId.isIn(climbIds)))
           .write(_photoTombstone(now));
       await (update(climbs)..where((c) => c.gymId.equals(id)))
           .write(_climbTombstone(now));
     }
-    return (update(gyms)..where((g) => g.id.equals(id))).write(_gymTombstone(now));
+    return (update(gyms)..where((g) => g.id.equals(id)))
+        .write(_gymTombstone(now));
   }
 
   // --- WallTypes ---
-  Stream<List<WallType>> watchWallTypes() =>
-      (select(wallTypes)
-            ..where((w) => w.isDeleted.equals(false))
-            ..orderBy([(w) => OrderingTerm(expression: w.id)]))
-          .watch();
+  Stream<List<WallType>> watchWallTypes() => (select(wallTypes)
+        ..where((w) => w.isDeleted.equals(false))
+        ..orderBy([(w) => OrderingTerm(expression: w.id)]))
+      .watch();
 
   Future<int> insertWallType(String name) =>
       into(wallTypes).insert(WallTypesCompanion(name: Value(name)));
 
   // --- Climbs ---
-  Stream<List<Climb>> watchClimbs() =>
-      (select(climbs)
-            ..where((c) => c.isDeleted.equals(false))
-            ..orderBy([
-              (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
-              (c) =>
-                  OrderingTerm(expression: c.createdAt, mode: OrderingMode.desc),
-            ]))
-          .watch();
+  Stream<List<Climb>> watchClimbs() => (select(climbs)
+        ..where((c) => c.isDeleted.equals(false))
+        ..orderBy([
+          (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
+          (c) => OrderingTerm(expression: c.createdAt, mode: OrderingMode.desc),
+        ]))
+      .watch();
 
   Future<int> insertClimb(ClimbsCompanion climb) => into(climbs).insert(climb);
 
   Future<bool> updateClimb(ClimbsCompanion climb) async {
-    final n = await (update(climbs)..where((c) => c.id.equals(climb.id.value)))
-        .write(
-          climb.copyWith(
-            updatedAt: Value(DateTime.now()),
-            dirty: const Value(true),
-          ),
-        );
+    final n =
+        await (update(climbs)..where((c) => c.id.equals(climb.id.value))).write(
+      climb.copyWith(
+        updatedAt: Value(DateTime.now()),
+        dirty: const Value(true),
+      ),
+    );
     return n > 0;
   }
 
@@ -213,17 +215,15 @@ class AppDatabase extends _$AppDatabase {
 
   // --- ClimbPhotos ---
   /// 全写真を監視（記録一覧のサムネ表示用）。
-  Stream<List<ClimbPhoto>> watchAllPhotos() =>
-      (select(climbPhotos)
-            ..where((p) => p.isDeleted.equals(false))
-            ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
-          .watch();
+  Stream<List<ClimbPhoto>> watchAllPhotos() => (select(climbPhotos)
+        ..where((p) => p.isDeleted.equals(false))
+        ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
+      .watch();
 
-  Future<List<ClimbPhoto>> getClimbPhotos(int climbId) =>
-      (select(climbPhotos)
-            ..where((p) => p.climbId.equals(climbId) & p.isDeleted.equals(false))
-            ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
-          .get();
+  Future<List<ClimbPhoto>> getClimbPhotos(int climbId) => (select(climbPhotos)
+        ..where((p) => p.climbId.equals(climbId) & p.isDeleted.equals(false))
+        ..orderBy([(p) => OrderingTerm(expression: p.sortOrder)]))
+      .get();
 
   Future<int> insertClimbPhoto(int climbId, String path, int sortOrder) =>
       into(climbPhotos).insert(
@@ -239,13 +239,12 @@ class AppDatabase extends _$AppDatabase {
           .write(_photoTombstone(DateTime.now()));
 
   /// エクスポート用に全記録を新しい順で取得。
-  Future<List<Climb>> getAllClimbs() =>
-      (select(climbs)
-            ..where((c) => c.isDeleted.equals(false))
-            ..orderBy([
-              (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
-            ]))
-          .get();
+  Future<List<Climb>> getAllClimbs() => (select(climbs)
+        ..where((c) => c.isDeleted.equals(false))
+        ..orderBy([
+          (c) => OrderingTerm(expression: c.date, mode: OrderingMode.desc),
+        ]))
+      .get();
 
   // ========================================================================
   // 同期エンジン（SyncService）向けのプリミティブ。
@@ -268,58 +267,65 @@ class AppDatabase extends _$AppDatabase {
   Future<Gym?> gymBySyncId(String syncId) =>
       (select(gyms)..where((g) => g.syncId.equals(syncId))).getSingleOrNull();
   Future<WallType?> wallTypeBySyncId(String syncId) => (select(
-    wallTypes,
-  )..where((w) => w.syncId.equals(syncId))).getSingleOrNull();
+        wallTypes,
+      )..where((w) => w.syncId.equals(syncId)))
+          .getSingleOrNull();
   Future<Climb?> climbBySyncId(String syncId) =>
       (select(climbs)..where((c) => c.syncId.equals(syncId))).getSingleOrNull();
 
   // --- リモート反映（syncId 衝突で upsert）。LWW 判定は呼び出し側で行う ---
   Future<void> upsertGymFromRemote(GymsCompanion data) => into(gyms).insert(
-    data,
-    onConflict: DoUpdate((_) => data, target: [gyms.syncId]),
-  );
+        data,
+        onConflict: DoUpdate((_) => data, target: [gyms.syncId]),
+      );
   Future<void> upsertWallTypeFromRemote(WallTypesCompanion data) =>
       into(wallTypes).insert(
         data,
         onConflict: DoUpdate((_) => data, target: [wallTypes.syncId]),
       );
-  Future<void> upsertClimbFromRemote(ClimbsCompanion data) => into(climbs).insert(
-    data,
-    onConflict: DoUpdate((_) => data, target: [climbs.syncId]),
-  );
+  Future<void> upsertClimbFromRemote(ClimbsCompanion data) =>
+      into(climbs).insert(
+        data,
+        onConflict: DoUpdate((_) => data, target: [climbs.syncId]),
+      );
 
   // --- push 成功後の dirty 解除。push 後に再編集された行を誤って解除しないよう
   //     updatedAt 一致を条件にする ---
   Future<void> markGymSynced(String syncId, DateTime pushedUpdatedAt) =>
-      (update(gyms)..where(
-            (g) =>
-                g.syncId.equals(syncId) & g.updatedAt.equals(pushedUpdatedAt),
-          ))
+      (update(gyms)
+            ..where(
+              (g) =>
+                  g.syncId.equals(syncId) & g.updatedAt.equals(pushedUpdatedAt),
+            ))
           .write(const GymsCompanion(dirty: Value(false)));
   Future<void> markWallTypeSynced(String syncId, DateTime pushedUpdatedAt) =>
-      (update(wallTypes)..where(
-            (w) =>
-                w.syncId.equals(syncId) & w.updatedAt.equals(pushedUpdatedAt),
-          ))
+      (update(wallTypes)
+            ..where(
+              (w) =>
+                  w.syncId.equals(syncId) & w.updatedAt.equals(pushedUpdatedAt),
+            ))
           .write(const WallTypesCompanion(dirty: Value(false)));
   Future<void> markClimbSynced(String syncId, DateTime pushedUpdatedAt) =>
-      (update(climbs)..where(
-            (c) =>
-                c.syncId.equals(syncId) & c.updatedAt.equals(pushedUpdatedAt),
-          ))
+      (update(climbs)
+            ..where(
+              (c) =>
+                  c.syncId.equals(syncId) & c.updatedAt.equals(pushedUpdatedAt),
+            ))
           .write(const ClimbsCompanion(dirty: Value(false)));
 
   // --- pull カーソル（コレクションごと） ---
   Future<DateTime?> getSyncCursor(String collection) async {
     final row = await (select(
       syncMeta,
-    )..where((m) => m.key.equals('cursor:$collection'))).getSingleOrNull();
+    )..where((m) => m.key.equals('cursor:$collection')))
+        .getSingleOrNull();
     return row?.value;
   }
 
   Future<void> setSyncCursor(String collection, DateTime value) =>
       into(syncMeta).insertOnConflictUpdate(
-        SyncMetaCompanion(key: Value('cursor:$collection'), value: Value(value)),
+        SyncMetaCompanion(
+            key: Value('cursor:$collection'), value: Value(value)),
       );
 
   /// アカウント切替時などにローカルの同期状態を初期化する（カーソルを消す）。
@@ -328,22 +334,22 @@ class AppDatabase extends _$AppDatabase {
 
 // 論理削除用の Companion（write() に渡して使う）。テーブルごとに型が異なる。
 GymsCompanion _gymTombstone(DateTime now) => GymsCompanion(
-  isDeleted: const Value(true),
-  dirty: const Value(true),
-  updatedAt: Value(now),
-);
+      isDeleted: const Value(true),
+      dirty: const Value(true),
+      updatedAt: Value(now),
+    );
 
 ClimbsCompanion _climbTombstone(DateTime now) => ClimbsCompanion(
-  isDeleted: const Value(true),
-  dirty: const Value(true),
-  updatedAt: Value(now),
-);
+      isDeleted: const Value(true),
+      dirty: const Value(true),
+      updatedAt: Value(now),
+    );
 
 ClimbPhotosCompanion _photoTombstone(DateTime now) => ClimbPhotosCompanion(
-  isDeleted: const Value(true),
-  dirty: const Value(true),
-  updatedAt: Value(now),
-);
+      isDeleted: const Value(true),
+      dirty: const Value(true),
+      updatedAt: Value(now),
+    );
 
 QueryExecutor _openConnection() {
   return driftDatabase(name: 'climb_log');

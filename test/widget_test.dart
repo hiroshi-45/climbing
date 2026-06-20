@@ -168,7 +168,8 @@ void main() {
     // dirty を落とし updatedAt を過去にしておき、更新で両方が変わることを確認する
     // （Drift は DateTime を秒精度で保存するため、明示的に過去日時を置く）。
     await (db.update(db.climbs)..where((c) => c.id.equals(climbId))).write(
-      ClimbsCompanion(dirty: const Value(false), updatedAt: Value(DateTime(2020))),
+      ClimbsCompanion(
+          dirty: const Value(false), updatedAt: Value(DateTime(2020))),
     );
     final before = (await db.select(db.climbs).get()).single;
     expect(before.dirty, isFalse);

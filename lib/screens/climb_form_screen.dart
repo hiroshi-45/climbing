@@ -71,9 +71,8 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
   }
 
   Future<void> _loadExistingPhotos() async {
-    final rows = await ref
-        .read(databaseProvider)
-        .getClimbPhotos(widget.climb!.id);
+    final rows =
+        await ref.read(databaseProvider).getClimbPhotos(widget.climb!.id);
     if (!mounted) return;
     setState(() {
       _photos
@@ -338,9 +337,8 @@ class _ClimbFormScreenState extends ConsumerState<ClimbFormScreen> {
                 const Text('トライ数'),
                 const Spacer(),
                 IconButton.filledTonal(
-                  onPressed: _attempts > 1
-                      ? () => setState(() => _attempts--)
-                      : null,
+                  onPressed:
+                      _attempts > 1 ? () => setState(() => _attempts--) : null,
                   icon: const Icon(Icons.remove),
                 ),
                 Padding(
@@ -429,19 +427,19 @@ class _PhotoGallery extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: [
               ...photos.asMap().entries.map(
-                (e) => _Thumb(
-                  path: e.value.path,
-                  onRemove: () => onRemove(e.value),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => PhotoViewerScreen(
-                        paths: photos.map((p) => p.path).toList(),
-                        initialIndex: e.key,
+                    (e) => _Thumb(
+                      path: e.value.path,
+                      onRemove: () => onRemove(e.value),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PhotoViewerScreen(
+                            paths: photos.map((p) => p.path).toList(),
+                            initialIndex: e.key,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
               _AddButtons(onAdd: onAdd),
             ],
           ),

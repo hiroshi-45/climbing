@@ -35,7 +35,9 @@ class _ClimbsTabState extends ConsumerState<ClimbsTab> {
         title: const Text('登攀記録'),
         actions: [
           _RoundAction(
-            icon: _calendarMode ? Icons.view_agenda_outlined : Icons.calendar_month,
+            icon: _calendarMode
+                ? Icons.view_agenda_outlined
+                : Icons.calendar_month,
             tooltip: _calendarMode ? 'リスト表示' : 'カレンダー表示',
             onPressed: () => setState(() => _calendarMode = !_calendarMode),
           ),
@@ -313,7 +315,8 @@ class _StreakBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.local_fire_department, color: Colors.white, size: 16),
+          const Icon(Icons.local_fire_department,
+              color: Colors.white, size: 16),
           const SizedBox(width: 4),
           Text(
             streak > 0 ? '$streak日連続' : '今日から登ろう',
@@ -412,7 +415,8 @@ class _ClimbList extends StatelessWidget {
                     const Spacer(),
                     Pill(
                       label: '完登 $sentCount / ${dayClimbs.length}',
-                      color: sentCount > 0 ? AppPalette.sent : AppPalette.textLow,
+                      color:
+                          sentCount > 0 ? AppPalette.sent : AppPalette.textLow,
                       filled: true,
                     ),
                   ],
@@ -512,7 +516,8 @@ class _ClimbCalendarState extends State<_ClimbCalendar> {
                 fontWeight: FontWeight.w800,
                 fontSize: 16,
               ),
-              leftChevronIcon: Icon(Icons.chevron_left, color: AppPalette.textMid),
+              leftChevronIcon:
+                  Icon(Icons.chevron_left, color: AppPalette.textMid),
               rightChevronIcon:
                   Icon(Icons.chevron_right, color: AppPalette.textMid),
             ),
@@ -602,9 +607,8 @@ class ClimbItem extends ConsumerWidget {
     final gymMap = ref.watch(gymMapProvider);
     final wallMap = ref.watch(wallTypeMapProvider);
     final photos = ref.watch(photosByClimbProvider)[climb.id];
-    final wallType = climb.wallTypeId == null
-        ? null
-        : wallMap[climb.wallTypeId];
+    final wallType =
+        climb.wallTypeId == null ? null : wallMap[climb.wallTypeId];
 
     final hasPhoto = photos != null && photos.isNotEmpty;
     final accent = climb.isSent ? AppPalette.sent : AppPalette.projecting;
@@ -648,9 +652,7 @@ class ClimbItem extends ConsumerWidget {
                       label: climb.isSent ? '完登' : '挑戦中',
                       color: accent,
                       filled: true,
-                      icon: climb.isSent
-                          ? Icons.check_circle
-                          : Icons.adjust,
+                      icon: climb.isSent ? Icons.check_circle : Icons.adjust,
                     ),
                   ],
                 ),
@@ -665,7 +667,8 @@ class ClimbItem extends ConsumerWidget {
                       text: gymMap[climb.gymId]?.name ?? '(削除されたジム)',
                     ),
                     if (wallType != null)
-                      _Meta(icon: Icons.landscape_outlined, text: wallType.name),
+                      _Meta(
+                          icon: Icons.landscape_outlined, text: wallType.name),
                     _Meta(
                       icon: Icons.replay,
                       text: '${climb.attempts}トライ',

@@ -77,9 +77,7 @@ class _NearbyGymsScreenState extends ConsumerState<NearbyGymsScreen> {
   }
 
   Future<void> _addAsGym(NearbyGym gym) async {
-    await ref
-        .read(databaseProvider)
-        .insertGym(
+    await ref.read(databaseProvider).insertGym(
           GymsCompanion(
             name: Value(gym.name),
             location: Value(gym.address ?? gym.name),

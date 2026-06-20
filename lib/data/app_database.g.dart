@@ -122,16 +122,16 @@ class $GymsTable extends Gyms with TableInfo<$GymsTable, Gym> {
   );
   @override
   List<GeneratedColumn> get $columns => [
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    name,
-    location,
-    gradeSystem,
-    createdAt,
-  ];
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        name,
+        location,
+        gradeSystem,
+        createdAt,
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -351,17 +351,18 @@ class Gym extends DataClass implements Insertable<Gym> {
     Value<String?> location = const Value.absent(),
     String? gradeSystem,
     DateTime? createdAt,
-  }) => Gym(
-    syncId: syncId ?? this.syncId,
-    updatedAt: updatedAt ?? this.updatedAt,
-    isDeleted: isDeleted ?? this.isDeleted,
-    dirty: dirty ?? this.dirty,
-    id: id ?? this.id,
-    name: name ?? this.name,
-    location: location.present ? location.value : this.location,
-    gradeSystem: gradeSystem ?? this.gradeSystem,
-    createdAt: createdAt ?? this.createdAt,
-  );
+  }) =>
+      Gym(
+        syncId: syncId ?? this.syncId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+        dirty: dirty ?? this.dirty,
+        id: id ?? this.id,
+        name: name ?? this.name,
+        location: location.present ? location.value : this.location,
+        gradeSystem: gradeSystem ?? this.gradeSystem,
+        createdAt: createdAt ?? this.createdAt,
+      );
   Gym copyWithCompanion(GymsCompanion data) {
     return Gym(
       syncId: data.syncId.present ? data.syncId.value : this.syncId,
@@ -371,9 +372,8 @@ class Gym extends DataClass implements Insertable<Gym> {
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       location: data.location.present ? data.location.value : this.location,
-      gradeSystem: data.gradeSystem.present
-          ? data.gradeSystem.value
-          : this.gradeSystem,
+      gradeSystem:
+          data.gradeSystem.present ? data.gradeSystem.value : this.gradeSystem,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -396,16 +396,16 @@ class Gym extends DataClass implements Insertable<Gym> {
 
   @override
   int get hashCode => Object.hash(
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    name,
-    location,
-    gradeSystem,
-    createdAt,
-  );
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        name,
+        location,
+        gradeSystem,
+        createdAt,
+      );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -636,13 +636,13 @@ class $WallTypesTable extends WallTypes
   );
   @override
   List<GeneratedColumn> get $columns => [
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    name,
-  ];
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        name,
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -804,14 +804,15 @@ class WallType extends DataClass implements Insertable<WallType> {
     bool? dirty,
     int? id,
     String? name,
-  }) => WallType(
-    syncId: syncId ?? this.syncId,
-    updatedAt: updatedAt ?? this.updatedAt,
-    isDeleted: isDeleted ?? this.isDeleted,
-    dirty: dirty ?? this.dirty,
-    id: id ?? this.id,
-    name: name ?? this.name,
-  );
+  }) =>
+      WallType(
+        syncId: syncId ?? this.syncId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+        dirty: dirty ?? this.dirty,
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
   WallType copyWithCompanion(WallTypesCompanion data) {
     return WallType(
       syncId: data.syncId.present ? data.syncId.value : this.syncId,
@@ -1124,21 +1125,21 @@ class $ClimbsTable extends Climbs with TableInfo<$ClimbsTable, Climb> {
   );
   @override
   List<GeneratedColumn> get $columns => [
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    gymId,
-    date,
-    grade,
-    wallTypeId,
-    attempts,
-    isSent,
-    photoPath,
-    memo,
-    createdAt,
-  ];
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        gymId,
+        date,
+        grade,
+        wallTypeId,
+        attempts,
+        isSent,
+        photoPath,
+        memo,
+        createdAt,
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1453,22 +1454,23 @@ class Climb extends DataClass implements Insertable<Climb> {
     Value<String?> photoPath = const Value.absent(),
     Value<String?> memo = const Value.absent(),
     DateTime? createdAt,
-  }) => Climb(
-    syncId: syncId ?? this.syncId,
-    updatedAt: updatedAt ?? this.updatedAt,
-    isDeleted: isDeleted ?? this.isDeleted,
-    dirty: dirty ?? this.dirty,
-    id: id ?? this.id,
-    gymId: gymId ?? this.gymId,
-    date: date ?? this.date,
-    grade: grade ?? this.grade,
-    wallTypeId: wallTypeId.present ? wallTypeId.value : this.wallTypeId,
-    attempts: attempts ?? this.attempts,
-    isSent: isSent ?? this.isSent,
-    photoPath: photoPath.present ? photoPath.value : this.photoPath,
-    memo: memo.present ? memo.value : this.memo,
-    createdAt: createdAt ?? this.createdAt,
-  );
+  }) =>
+      Climb(
+        syncId: syncId ?? this.syncId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+        dirty: dirty ?? this.dirty,
+        id: id ?? this.id,
+        gymId: gymId ?? this.gymId,
+        date: date ?? this.date,
+        grade: grade ?? this.grade,
+        wallTypeId: wallTypeId.present ? wallTypeId.value : this.wallTypeId,
+        attempts: attempts ?? this.attempts,
+        isSent: isSent ?? this.isSent,
+        photoPath: photoPath.present ? photoPath.value : this.photoPath,
+        memo: memo.present ? memo.value : this.memo,
+        createdAt: createdAt ?? this.createdAt,
+      );
   Climb copyWithCompanion(ClimbsCompanion data) {
     return Climb(
       syncId: data.syncId.present ? data.syncId.value : this.syncId,
@@ -1479,9 +1481,8 @@ class Climb extends DataClass implements Insertable<Climb> {
       gymId: data.gymId.present ? data.gymId.value : this.gymId,
       date: data.date.present ? data.date.value : this.date,
       grade: data.grade.present ? data.grade.value : this.grade,
-      wallTypeId: data.wallTypeId.present
-          ? data.wallTypeId.value
-          : this.wallTypeId,
+      wallTypeId:
+          data.wallTypeId.present ? data.wallTypeId.value : this.wallTypeId,
       attempts: data.attempts.present ? data.attempts.value : this.attempts,
       isSent: data.isSent.present ? data.isSent.value : this.isSent,
       photoPath: data.photoPath.present ? data.photoPath.value : this.photoPath,
@@ -1513,21 +1514,21 @@ class Climb extends DataClass implements Insertable<Climb> {
 
   @override
   int get hashCode => Object.hash(
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    gymId,
-    date,
-    grade,
-    wallTypeId,
-    attempts,
-    isSent,
-    photoPath,
-    memo,
-    createdAt,
-  );
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        gymId,
+        date,
+        grade,
+        wallTypeId,
+        attempts,
+        isSent,
+        photoPath,
+        memo,
+        createdAt,
+      );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1594,9 +1595,9 @@ class ClimbsCompanion extends UpdateCompanion<Climb> {
     this.photoPath = const Value.absent(),
     this.memo = const Value.absent(),
     this.createdAt = const Value.absent(),
-  }) : gymId = Value(gymId),
-       date = Value(date),
-       grade = Value(grade);
+  })  : gymId = Value(gymId),
+        date = Value(date),
+        grade = Value(grade);
   static Insertable<Climb> custom({
     Expression<String>? syncId,
     Expression<DateTime>? updatedAt,
@@ -1854,16 +1855,16 @@ class $ClimbPhotosTable extends ClimbPhotos
   );
   @override
   List<GeneratedColumn> get $columns => [
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    climbId,
-    path,
-    sortOrder,
-    createdAt,
-  ];
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        climbId,
+        path,
+        sortOrder,
+        createdAt,
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2078,17 +2079,18 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
     String? path,
     int? sortOrder,
     DateTime? createdAt,
-  }) => ClimbPhoto(
-    syncId: syncId ?? this.syncId,
-    updatedAt: updatedAt ?? this.updatedAt,
-    isDeleted: isDeleted ?? this.isDeleted,
-    dirty: dirty ?? this.dirty,
-    id: id ?? this.id,
-    climbId: climbId ?? this.climbId,
-    path: path ?? this.path,
-    sortOrder: sortOrder ?? this.sortOrder,
-    createdAt: createdAt ?? this.createdAt,
-  );
+  }) =>
+      ClimbPhoto(
+        syncId: syncId ?? this.syncId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+        dirty: dirty ?? this.dirty,
+        id: id ?? this.id,
+        climbId: climbId ?? this.climbId,
+        path: path ?? this.path,
+        sortOrder: sortOrder ?? this.sortOrder,
+        createdAt: createdAt ?? this.createdAt,
+      );
   ClimbPhoto copyWithCompanion(ClimbPhotosCompanion data) {
     return ClimbPhoto(
       syncId: data.syncId.present ? data.syncId.value : this.syncId,
@@ -2121,16 +2123,16 @@ class ClimbPhoto extends DataClass implements Insertable<ClimbPhoto> {
 
   @override
   int get hashCode => Object.hash(
-    syncId,
-    updatedAt,
-    isDeleted,
-    dirty,
-    id,
-    climbId,
-    path,
-    sortOrder,
-    createdAt,
-  );
+        syncId,
+        updatedAt,
+        isDeleted,
+        dirty,
+        id,
+        climbId,
+        path,
+        sortOrder,
+        createdAt,
+      );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2177,8 +2179,8 @@ class ClimbPhotosCompanion extends UpdateCompanion<ClimbPhoto> {
     required String path,
     this.sortOrder = const Value.absent(),
     this.createdAt = const Value.absent(),
-  }) : climbId = Value(climbId),
-       path = Value(path);
+  })  : climbId = Value(climbId),
+        path = Value(path);
   static Insertable<ClimbPhoto> custom({
     Expression<String>? syncId,
     Expression<DateTime>? updatedAt,
@@ -2372,9 +2374,8 @@ class SyncMetaData extends DataClass implements Insertable<SyncMetaData> {
   SyncMetaCompanion toCompanion(bool nullToAbsent) {
     return SyncMetaCompanion(
       key: Value(key),
-      value: value == null && nullToAbsent
-          ? const Value.absent()
-          : Value(value),
+      value:
+          value == null && nullToAbsent ? const Value.absent() : Value(value),
     );
   }
 
@@ -2400,10 +2401,11 @@ class SyncMetaData extends DataClass implements Insertable<SyncMetaData> {
   SyncMetaData copyWith({
     String? key,
     Value<DateTime?> value = const Value.absent(),
-  }) => SyncMetaData(
-    key: key ?? this.key,
-    value: value.present ? value.value : this.value,
-  );
+  }) =>
+      SyncMetaData(
+        key: key ?? this.key,
+        value: value.present ? value.value : this.value,
+      );
   SyncMetaData copyWithCompanion(SyncMetaCompanion data) {
     return SyncMetaData(
       key: data.key.present ? data.key.value : this.key,
@@ -2507,62 +2509,60 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-    gyms,
-    wallTypes,
-    climbs,
-    climbPhotos,
-    syncMeta,
-  ];
+        gyms,
+        wallTypes,
+        climbs,
+        climbPhotos,
+        syncMeta,
+      ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'gyms',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('climbs', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'wall_types',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('climbs', kind: UpdateKind.update)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'climbs',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('climb_photos', kind: UpdateKind.delete)],
-    ),
-  ]);
+        WritePropagation(
+          on: TableUpdateQuery.onTableName(
+            'gyms',
+            limitUpdateKind: UpdateKind.delete,
+          ),
+          result: [TableUpdate('climbs', kind: UpdateKind.delete)],
+        ),
+        WritePropagation(
+          on: TableUpdateQuery.onTableName(
+            'wall_types',
+            limitUpdateKind: UpdateKind.delete,
+          ),
+          result: [TableUpdate('climbs', kind: UpdateKind.update)],
+        ),
+        WritePropagation(
+          on: TableUpdateQuery.onTableName(
+            'climbs',
+            limitUpdateKind: UpdateKind.delete,
+          ),
+          result: [TableUpdate('climb_photos', kind: UpdateKind.delete)],
+        ),
+      ]);
 }
 
-typedef $$GymsTableCreateCompanionBuilder =
-    GymsCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      required String name,
-      Value<String?> location,
-      Value<String> gradeSystem,
-      Value<DateTime> createdAt,
-    });
-typedef $$GymsTableUpdateCompanionBuilder =
-    GymsCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      Value<String> name,
-      Value<String?> location,
-      Value<String> gradeSystem,
-      Value<DateTime> createdAt,
-    });
+typedef $$GymsTableCreateCompanionBuilder = GymsCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  required String name,
+  Value<String?> location,
+  Value<String> gradeSystem,
+  Value<DateTime> createdAt,
+});
+typedef $$GymsTableUpdateCompanionBuilder = GymsCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  Value<String> name,
+  Value<String?> location,
+  Value<String> gradeSystem,
+  Value<DateTime> createdAt,
+});
 
 final class $$GymsTableReferences
     extends BaseReferences<_$AppDatabase, $GymsTable, Gym> {
@@ -2570,10 +2570,11 @@ final class $$GymsTableReferences
 
   static MultiTypedResultKey<$ClimbsTable, List<Climb>> _climbsRefsTable(
     _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.climbs,
-    aliasName: 'gyms__id__climbs__gym_id',
-  );
+  ) =>
+      MultiTypedResultKey.fromTable(
+        db.climbs,
+        aliasName: 'gyms__id__climbs__gym_id',
+      );
 
   $$ClimbsTableProcessedTableManager get climbsRefs {
     final manager = $$ClimbsTableTableManager(
@@ -2597,49 +2598,49 @@ class $$GymsTableFilterComposer extends Composer<_$AppDatabase, $GymsTable> {
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get location => $composableBuilder(
-    column: $table.location,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.location,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get gradeSystem => $composableBuilder(
-    column: $table.gradeSystem,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.gradeSystem,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   Expression<bool> climbsRefs(
     Expression<bool> Function($$ClimbsTableFilterComposer f) f,
@@ -2649,19 +2650,18 @@ class $$GymsTableFilterComposer extends Composer<_$AppDatabase, $GymsTable> {
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.gymId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableFilterComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableFilterComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
@@ -2676,49 +2676,49 @@ class $$GymsTableOrderingComposer extends Composer<_$AppDatabase, $GymsTable> {
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get location => $composableBuilder(
-    column: $table.location,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.location,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get gradeSystem => $composableBuilder(
-    column: $table.gradeSystem,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.gradeSystem,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 }
 
 class $$GymsTableAnnotationComposer
@@ -2752,9 +2752,9 @@ class $$GymsTableAnnotationComposer
       $composableBuilder(column: $table.location, builder: (column) => column);
 
   GeneratedColumn<String> get gradeSystem => $composableBuilder(
-    column: $table.gradeSystem,
-    builder: (column) => column,
-  );
+        column: $table.gradeSystem,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -2767,159 +2767,152 @@ class $$GymsTableAnnotationComposer
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.gymId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableAnnotationComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
 }
 
-class $$GymsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $GymsTable,
-          Gym,
-          $$GymsTableFilterComposer,
-          $$GymsTableOrderingComposer,
-          $$GymsTableAnnotationComposer,
-          $$GymsTableCreateCompanionBuilder,
-          $$GymsTableUpdateCompanionBuilder,
-          (Gym, $$GymsTableReferences),
-          Gym,
-          PrefetchHooks Function({bool climbsRefs})
-        > {
+class $$GymsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $GymsTable,
+    Gym,
+    $$GymsTableFilterComposer,
+    $$GymsTableOrderingComposer,
+    $$GymsTableAnnotationComposer,
+    $$GymsTableCreateCompanionBuilder,
+    $$GymsTableUpdateCompanionBuilder,
+    (Gym, $$GymsTableReferences),
+    Gym,
+    PrefetchHooks Function({bool climbsRefs})> {
   $$GymsTableTableManager(_$AppDatabase db, $GymsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$GymsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$GymsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$GymsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
-                Value<String?> location = const Value.absent(),
-                Value<String> gradeSystem = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => GymsCompanion(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                name: name,
-                location: location,
-                gradeSystem: gradeSystem,
-                createdAt: createdAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                required String name,
-                Value<String?> location = const Value.absent(),
-                Value<String> gradeSystem = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => GymsCompanion.insert(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                name: name,
-                location: location,
-                gradeSystem: gradeSystem,
-                createdAt: createdAt,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) =>
-                    (e.readTable(table), $$GymsTableReferences(db, table, e)),
-              )
-              .toList(),
-          prefetchHooksCallback: ({climbsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (climbsRefs) db.climbs],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (climbsRefs)
-                    await $_getPrefetchedData<Gym, $GymsTable, Climb>(
-                      currentTable: table,
-                      referencedTable: $$GymsTableReferences._climbsRefsTable(
-                        db,
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$GymsTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$GymsTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$GymsTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              Value<String> name = const Value.absent(),
+              Value<String?> location = const Value.absent(),
+              Value<String> gradeSystem = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                GymsCompanion(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              name: name,
+              location: location,
+              gradeSystem: gradeSystem,
+              createdAt: createdAt,
+            ),
+            createCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              required String name,
+              Value<String?> location = const Value.absent(),
+              Value<String> gradeSystem = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                GymsCompanion.insert(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              name: name,
+              location: location,
+              gradeSystem: gradeSystem,
+              createdAt: createdAt,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map(
+                  (e) =>
+                      (e.readTable(table), $$GymsTableReferences(db, table, e)),
+                )
+                .toList(),
+            prefetchHooksCallback: ({climbsRefs = false}) {
+              return PrefetchHooks(
+                db: db,
+                explicitlyWatchedTables: [if (climbsRefs) db.climbs],
+                addJoins: null,
+                getPrefetchedDataCallback: (items) async {
+                  return [
+                    if (climbsRefs)
+                      await $_getPrefetchedData<Gym, $GymsTable, Climb>(
+                        currentTable: table,
+                        referencedTable: $$GymsTableReferences._climbsRefsTable(
+                          db,
+                        ),
+                        managerFromTypedResult: (p0) =>
+                            $$GymsTableReferences(db, table, p0).climbsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.gymId == item.id),
+                        typedResults: items,
                       ),
-                      managerFromTypedResult: (p0) =>
-                          $$GymsTableReferences(db, table, p0).climbsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.gymId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
-        ),
-      );
+                  ];
+                },
+              );
+            },
+          ),
+        );
 }
 
-typedef $$GymsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $GymsTable,
-      Gym,
-      $$GymsTableFilterComposer,
-      $$GymsTableOrderingComposer,
-      $$GymsTableAnnotationComposer,
-      $$GymsTableCreateCompanionBuilder,
-      $$GymsTableUpdateCompanionBuilder,
-      (Gym, $$GymsTableReferences),
-      Gym,
-      PrefetchHooks Function({bool climbsRefs})
-    >;
-typedef $$WallTypesTableCreateCompanionBuilder =
-    WallTypesCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      required String name,
-    });
-typedef $$WallTypesTableUpdateCompanionBuilder =
-    WallTypesCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      Value<String> name,
-    });
+typedef $$GymsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $GymsTable,
+    Gym,
+    $$GymsTableFilterComposer,
+    $$GymsTableOrderingComposer,
+    $$GymsTableAnnotationComposer,
+    $$GymsTableCreateCompanionBuilder,
+    $$GymsTableUpdateCompanionBuilder,
+    (Gym, $$GymsTableReferences),
+    Gym,
+    PrefetchHooks Function({bool climbsRefs})>;
+typedef $$WallTypesTableCreateCompanionBuilder = WallTypesCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  required String name,
+});
+typedef $$WallTypesTableUpdateCompanionBuilder = WallTypesCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  Value<String> name,
+});
 
 final class $$WallTypesTableReferences
     extends BaseReferences<_$AppDatabase, $WallTypesTable, WallType> {
@@ -2927,10 +2920,11 @@ final class $$WallTypesTableReferences
 
   static MultiTypedResultKey<$ClimbsTable, List<Climb>> _climbsRefsTable(
     _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.climbs,
-    aliasName: 'wall_types__id__climbs__wall_type_id',
-  );
+  ) =>
+      MultiTypedResultKey.fromTable(
+        db.climbs,
+        aliasName: 'wall_types__id__climbs__wall_type_id',
+      );
 
   $$ClimbsTableProcessedTableManager get climbsRefs {
     final manager = $$ClimbsTableTableManager(
@@ -2955,34 +2949,34 @@ class $$WallTypesTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnFilters(column),
+      );
 
   Expression<bool> climbsRefs(
     Expression<bool> Function($$ClimbsTableFilterComposer f) f,
@@ -2992,19 +2986,18 @@ class $$WallTypesTableFilterComposer
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.wallTypeId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableFilterComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableFilterComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
@@ -3020,34 +3013,34 @@ class $$WallTypesTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.name,
+        builder: (column) => ColumnOrderings(column),
+      );
 }
 
 class $$WallTypesTableAnnotationComposer
@@ -3085,164 +3078,159 @@ class $$WallTypesTableAnnotationComposer
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.wallTypeId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableAnnotationComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
 }
 
-class $$WallTypesTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $WallTypesTable,
-          WallType,
-          $$WallTypesTableFilterComposer,
-          $$WallTypesTableOrderingComposer,
-          $$WallTypesTableAnnotationComposer,
-          $$WallTypesTableCreateCompanionBuilder,
-          $$WallTypesTableUpdateCompanionBuilder,
-          (WallType, $$WallTypesTableReferences),
-          WallType,
-          PrefetchHooks Function({bool climbsRefs})
-        > {
+class $$WallTypesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $WallTypesTable,
+    WallType,
+    $$WallTypesTableFilterComposer,
+    $$WallTypesTableOrderingComposer,
+    $$WallTypesTableAnnotationComposer,
+    $$WallTypesTableCreateCompanionBuilder,
+    $$WallTypesTableUpdateCompanionBuilder,
+    (WallType, $$WallTypesTableReferences),
+    WallType,
+    PrefetchHooks Function({bool climbsRefs})> {
   $$WallTypesTableTableManager(_$AppDatabase db, $WallTypesTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$WallTypesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$WallTypesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$WallTypesTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
-              }) => WallTypesCompanion(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                name: name,
-              ),
-          createCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                required String name,
-              }) => WallTypesCompanion.insert(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                name: name,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$WallTypesTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: ({climbsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (climbsRefs) db.climbs],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (climbsRefs)
-                    await $_getPrefetchedData<WallType, $WallTypesTable, Climb>(
-                      currentTable: table,
-                      referencedTable: $$WallTypesTableReferences
-                          ._climbsRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$WallTypesTableReferences(db, table, p0).climbsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.wallTypeId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
-        ),
-      );
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$WallTypesTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$WallTypesTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$WallTypesTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              Value<String> name = const Value.absent(),
+            }) =>
+                WallTypesCompanion(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              name: name,
+            ),
+            createCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              required String name,
+            }) =>
+                WallTypesCompanion.insert(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              name: name,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map(
+                  (e) => (
+                    e.readTable(table),
+                    $$WallTypesTableReferences(db, table, e),
+                  ),
+                )
+                .toList(),
+            prefetchHooksCallback: ({climbsRefs = false}) {
+              return PrefetchHooks(
+                db: db,
+                explicitlyWatchedTables: [if (climbsRefs) db.climbs],
+                addJoins: null,
+                getPrefetchedDataCallback: (items) async {
+                  return [
+                    if (climbsRefs)
+                      await $_getPrefetchedData<WallType, $WallTypesTable,
+                          Climb>(
+                        currentTable: table,
+                        referencedTable:
+                            $$WallTypesTableReferences._climbsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$WallTypesTableReferences(db, table, p0)
+                                .climbsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.wallTypeId == item.id),
+                        typedResults: items,
+                      ),
+                  ];
+                },
+              );
+            },
+          ),
+        );
 }
 
-typedef $$WallTypesTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $WallTypesTable,
-      WallType,
-      $$WallTypesTableFilterComposer,
-      $$WallTypesTableOrderingComposer,
-      $$WallTypesTableAnnotationComposer,
-      $$WallTypesTableCreateCompanionBuilder,
-      $$WallTypesTableUpdateCompanionBuilder,
-      (WallType, $$WallTypesTableReferences),
-      WallType,
-      PrefetchHooks Function({bool climbsRefs})
-    >;
-typedef $$ClimbsTableCreateCompanionBuilder =
-    ClimbsCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      required int gymId,
-      required DateTime date,
-      required String grade,
-      Value<int?> wallTypeId,
-      Value<int> attempts,
-      Value<bool> isSent,
-      Value<String?> photoPath,
-      Value<String?> memo,
-      Value<DateTime> createdAt,
-    });
-typedef $$ClimbsTableUpdateCompanionBuilder =
-    ClimbsCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      Value<int> gymId,
-      Value<DateTime> date,
-      Value<String> grade,
-      Value<int?> wallTypeId,
-      Value<int> attempts,
-      Value<bool> isSent,
-      Value<String?> photoPath,
-      Value<String?> memo,
-      Value<DateTime> createdAt,
-    });
+typedef $$WallTypesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $WallTypesTable,
+    WallType,
+    $$WallTypesTableFilterComposer,
+    $$WallTypesTableOrderingComposer,
+    $$WallTypesTableAnnotationComposer,
+    $$WallTypesTableCreateCompanionBuilder,
+    $$WallTypesTableUpdateCompanionBuilder,
+    (WallType, $$WallTypesTableReferences),
+    WallType,
+    PrefetchHooks Function({bool climbsRefs})>;
+typedef $$ClimbsTableCreateCompanionBuilder = ClimbsCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  required int gymId,
+  required DateTime date,
+  required String grade,
+  Value<int?> wallTypeId,
+  Value<int> attempts,
+  Value<bool> isSent,
+  Value<String?> photoPath,
+  Value<String?> memo,
+  Value<DateTime> createdAt,
+});
+typedef $$ClimbsTableUpdateCompanionBuilder = ClimbsCompanion Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  Value<int> gymId,
+  Value<DateTime> date,
+  Value<String> grade,
+  Value<int?> wallTypeId,
+  Value<int> attempts,
+  Value<bool> isSent,
+  Value<String?> photoPath,
+  Value<String?> memo,
+  Value<DateTime> createdAt,
+});
 
 final class $$ClimbsTableReferences
     extends BaseReferences<_$AppDatabase, $ClimbsTable, Climb> {
@@ -3283,10 +3271,10 @@ final class $$ClimbsTableReferences
   }
 
   static MultiTypedResultKey<$ClimbPhotosTable, List<ClimbPhoto>>
-  _climbPhotosRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.climbPhotos,
-    aliasName: 'climbs__id__climb_photos__climb_id',
-  );
+      _climbPhotosRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+            db.climbPhotos,
+            aliasName: 'climbs__id__climb_photos__climb_id',
+          );
 
   $$ClimbPhotosTableProcessedTableManager get climbPhotosRefs {
     final manager = $$ClimbPhotosTableTableManager(
@@ -3311,64 +3299,64 @@ class $$ClimbsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.date,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get grade => $composableBuilder(
-    column: $table.grade,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.grade,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get attempts => $composableBuilder(
-    column: $table.attempts,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.attempts,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isSent => $composableBuilder(
-    column: $table.isSent,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isSent,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get photoPath => $composableBuilder(
-    column: $table.photoPath,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.photoPath,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get memo => $composableBuilder(
-    column: $table.memo,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.memo,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   $$GymsTableFilterComposer get gymId {
     final $$GymsTableFilterComposer composer = $composerBuilder(
@@ -3376,19 +3364,18 @@ class $$ClimbsTableFilterComposer
       getCurrentColumn: (t) => t.gymId,
       referencedTable: $db.gyms,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymsTableFilterComposer(
-            $db: $db,
-            $table: $db.gyms,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$GymsTableFilterComposer(
+        $db: $db,
+        $table: $db.gyms,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3399,19 +3386,18 @@ class $$ClimbsTableFilterComposer
       getCurrentColumn: (t) => t.wallTypeId,
       referencedTable: $db.wallTypes,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$WallTypesTableFilterComposer(
-            $db: $db,
-            $table: $db.wallTypes,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$WallTypesTableFilterComposer(
+        $db: $db,
+        $table: $db.wallTypes,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3424,19 +3410,18 @@ class $$ClimbsTableFilterComposer
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbPhotos,
       getReferencedColumn: (t) => t.climbId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbPhotosTableFilterComposer(
-            $db: $db,
-            $table: $db.climbPhotos,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbPhotosTableFilterComposer(
+        $db: $db,
+        $table: $db.climbPhotos,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
@@ -3452,64 +3437,64 @@ class $$ClimbsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.date,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get grade => $composableBuilder(
-    column: $table.grade,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.grade,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get attempts => $composableBuilder(
-    column: $table.attempts,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.attempts,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isSent => $composableBuilder(
-    column: $table.isSent,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isSent,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get photoPath => $composableBuilder(
-    column: $table.photoPath,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.photoPath,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get memo => $composableBuilder(
-    column: $table.memo,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.memo,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   $$GymsTableOrderingComposer get gymId {
     final $$GymsTableOrderingComposer composer = $composerBuilder(
@@ -3517,19 +3502,18 @@ class $$ClimbsTableOrderingComposer
       getCurrentColumn: (t) => t.gymId,
       referencedTable: $db.gyms,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymsTableOrderingComposer(
-            $db: $db,
-            $table: $db.gyms,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$GymsTableOrderingComposer(
+        $db: $db,
+        $table: $db.gyms,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3540,19 +3524,18 @@ class $$ClimbsTableOrderingComposer
       getCurrentColumn: (t) => t.wallTypeId,
       referencedTable: $db.wallTypes,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$WallTypesTableOrderingComposer(
-            $db: $db,
-            $table: $db.wallTypes,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$WallTypesTableOrderingComposer(
+        $db: $db,
+        $table: $db.wallTypes,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3609,19 +3592,18 @@ class $$ClimbsTableAnnotationComposer
       getCurrentColumn: (t) => t.gymId,
       referencedTable: $db.gyms,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.gyms,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$GymsTableAnnotationComposer(
+        $db: $db,
+        $table: $db.gyms,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3632,19 +3614,18 @@ class $$ClimbsTableAnnotationComposer
       getCurrentColumn: (t) => t.wallTypeId,
       referencedTable: $db.wallTypes,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$WallTypesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.wallTypes,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$WallTypesTableAnnotationComposer(
+        $db: $db,
+        $table: $db.wallTypes,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -3657,249 +3638,231 @@ class $$ClimbsTableAnnotationComposer
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.climbPhotos,
       getReferencedColumn: (t) => t.climbId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbPhotosTableAnnotationComposer(
-            $db: $db,
-            $table: $db.climbPhotos,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbPhotosTableAnnotationComposer(
+        $db: $db,
+        $table: $db.climbPhotos,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return f(composer);
   }
 }
 
-class $$ClimbsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ClimbsTable,
-          Climb,
-          $$ClimbsTableFilterComposer,
-          $$ClimbsTableOrderingComposer,
-          $$ClimbsTableAnnotationComposer,
-          $$ClimbsTableCreateCompanionBuilder,
-          $$ClimbsTableUpdateCompanionBuilder,
-          (Climb, $$ClimbsTableReferences),
-          Climb,
-          PrefetchHooks Function({
-            bool gymId,
-            bool wallTypeId,
-            bool climbPhotosRefs,
-          })
-        > {
+class $$ClimbsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ClimbsTable,
+    Climb,
+    $$ClimbsTableFilterComposer,
+    $$ClimbsTableOrderingComposer,
+    $$ClimbsTableAnnotationComposer,
+    $$ClimbsTableCreateCompanionBuilder,
+    $$ClimbsTableUpdateCompanionBuilder,
+    (Climb, $$ClimbsTableReferences),
+    Climb,
+    PrefetchHooks Function({
+      bool gymId,
+      bool wallTypeId,
+      bool climbPhotosRefs,
+    })> {
   $$ClimbsTableTableManager(_$AppDatabase db, $ClimbsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ClimbsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ClimbsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ClimbsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                Value<int> gymId = const Value.absent(),
-                Value<DateTime> date = const Value.absent(),
-                Value<String> grade = const Value.absent(),
-                Value<int?> wallTypeId = const Value.absent(),
-                Value<int> attempts = const Value.absent(),
-                Value<bool> isSent = const Value.absent(),
-                Value<String?> photoPath = const Value.absent(),
-                Value<String?> memo = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => ClimbsCompanion(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                gymId: gymId,
-                date: date,
-                grade: grade,
-                wallTypeId: wallTypeId,
-                attempts: attempts,
-                isSent: isSent,
-                photoPath: photoPath,
-                memo: memo,
-                createdAt: createdAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                required int gymId,
-                required DateTime date,
-                required String grade,
-                Value<int?> wallTypeId = const Value.absent(),
-                Value<int> attempts = const Value.absent(),
-                Value<bool> isSent = const Value.absent(),
-                Value<String?> photoPath = const Value.absent(),
-                Value<String?> memo = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => ClimbsCompanion.insert(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                gymId: gymId,
-                date: date,
-                grade: grade,
-                wallTypeId: wallTypeId,
-                attempts: attempts,
-                isSent: isSent,
-                photoPath: photoPath,
-                memo: memo,
-                createdAt: createdAt,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) =>
-                    (e.readTable(table), $$ClimbsTableReferences(db, table, e)),
-              )
-              .toList(),
-          prefetchHooksCallback:
-              ({gymId = false, wallTypeId = false, climbPhotosRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (climbPhotosRefs) db.climbPhotos,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (gymId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.gymId,
-                                    referencedTable: $$ClimbsTableReferences
-                                        ._gymIdTable(db),
-                                    referencedColumn: $$ClimbsTableReferences
-                                        ._gymIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
-                        if (wallTypeId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.wallTypeId,
-                                    referencedTable: $$ClimbsTableReferences
-                                        ._wallTypeIdTable(db),
-                                    referencedColumn: $$ClimbsTableReferences
-                                        ._wallTypeIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$ClimbsTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$ClimbsTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$ClimbsTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              Value<int> gymId = const Value.absent(),
+              Value<DateTime> date = const Value.absent(),
+              Value<String> grade = const Value.absent(),
+              Value<int?> wallTypeId = const Value.absent(),
+              Value<int> attempts = const Value.absent(),
+              Value<bool> isSent = const Value.absent(),
+              Value<String?> photoPath = const Value.absent(),
+              Value<String?> memo = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                ClimbsCompanion(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              gymId: gymId,
+              date: date,
+              grade: grade,
+              wallTypeId: wallTypeId,
+              attempts: attempts,
+              isSent: isSent,
+              photoPath: photoPath,
+              memo: memo,
+              createdAt: createdAt,
+            ),
+            createCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              required int gymId,
+              required DateTime date,
+              required String grade,
+              Value<int?> wallTypeId = const Value.absent(),
+              Value<int> attempts = const Value.absent(),
+              Value<bool> isSent = const Value.absent(),
+              Value<String?> photoPath = const Value.absent(),
+              Value<String?> memo = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                ClimbsCompanion.insert(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              gymId: gymId,
+              date: date,
+              grade: grade,
+              wallTypeId: wallTypeId,
+              attempts: attempts,
+              isSent: isSent,
+              photoPath: photoPath,
+              memo: memo,
+              createdAt: createdAt,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map(
+                  (e) => (
+                    e.readTable(table),
+                    $$ClimbsTableReferences(db, table, e)
+                  ),
+                )
+                .toList(),
+            prefetchHooksCallback: (
+                {gymId = false, wallTypeId = false, climbPhotosRefs = false}) {
+              return PrefetchHooks(
+                db: db,
+                explicitlyWatchedTables: [
+                  if (climbPhotosRefs) db.climbPhotos,
+                ],
+                addJoins: <
+                    T extends TableManagerState<
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic>>(state) {
+                  if (gymId) {
+                    state = state.withJoin(
+                      currentTable: table,
+                      currentColumn: table.gymId,
+                      referencedTable: $$ClimbsTableReferences._gymIdTable(db),
+                      referencedColumn:
+                          $$ClimbsTableReferences._gymIdTable(db).id,
+                    ) as T;
+                  }
+                  if (wallTypeId) {
+                    state = state.withJoin(
+                      currentTable: table,
+                      currentColumn: table.wallTypeId,
+                      referencedTable:
+                          $$ClimbsTableReferences._wallTypeIdTable(db),
+                      referencedColumn:
+                          $$ClimbsTableReferences._wallTypeIdTable(db).id,
+                    ) as T;
+                  }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (climbPhotosRefs)
-                        await $_getPrefetchedData<
-                          Climb,
-                          $ClimbsTable,
-                          ClimbPhoto
-                        >(
-                          currentTable: table,
-                          referencedTable: $$ClimbsTableReferences
-                              ._climbPhotosRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$ClimbsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).climbPhotosRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.climbId == item.id,
-                              ),
-                          typedResults: items,
+                  return state;
+                },
+                getPrefetchedDataCallback: (items) async {
+                  return [
+                    if (climbPhotosRefs)
+                      await $_getPrefetchedData<Climb, $ClimbsTable,
+                          ClimbPhoto>(
+                        currentTable: table,
+                        referencedTable:
+                            $$ClimbsTableReferences._climbPhotosRefsTable(db),
+                        managerFromTypedResult: (p0) => $$ClimbsTableReferences(
+                          db,
+                          table,
+                          p0,
+                        ).climbPhotosRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems.where(
+                          (e) => e.climbId == item.id,
                         ),
-                    ];
-                  },
-                );
-              },
-        ),
-      );
+                        typedResults: items,
+                      ),
+                  ];
+                },
+              );
+            },
+          ),
+        );
 }
 
-typedef $$ClimbsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ClimbsTable,
-      Climb,
-      $$ClimbsTableFilterComposer,
-      $$ClimbsTableOrderingComposer,
-      $$ClimbsTableAnnotationComposer,
-      $$ClimbsTableCreateCompanionBuilder,
-      $$ClimbsTableUpdateCompanionBuilder,
-      (Climb, $$ClimbsTableReferences),
-      Climb,
-      PrefetchHooks Function({
-        bool gymId,
-        bool wallTypeId,
-        bool climbPhotosRefs,
-      })
-    >;
-typedef $$ClimbPhotosTableCreateCompanionBuilder =
-    ClimbPhotosCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      required int climbId,
-      required String path,
-      Value<int> sortOrder,
-      Value<DateTime> createdAt,
-    });
-typedef $$ClimbPhotosTableUpdateCompanionBuilder =
-    ClimbPhotosCompanion Function({
-      Value<String> syncId,
-      Value<DateTime> updatedAt,
-      Value<bool> isDeleted,
-      Value<bool> dirty,
-      Value<int> id,
-      Value<int> climbId,
-      Value<String> path,
-      Value<int> sortOrder,
-      Value<DateTime> createdAt,
-    });
+typedef $$ClimbsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ClimbsTable,
+    Climb,
+    $$ClimbsTableFilterComposer,
+    $$ClimbsTableOrderingComposer,
+    $$ClimbsTableAnnotationComposer,
+    $$ClimbsTableCreateCompanionBuilder,
+    $$ClimbsTableUpdateCompanionBuilder,
+    (Climb, $$ClimbsTableReferences),
+    Climb,
+    PrefetchHooks Function({
+      bool gymId,
+      bool wallTypeId,
+      bool climbPhotosRefs,
+    })>;
+typedef $$ClimbPhotosTableCreateCompanionBuilder = ClimbPhotosCompanion
+    Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  required int climbId,
+  required String path,
+  Value<int> sortOrder,
+  Value<DateTime> createdAt,
+});
+typedef $$ClimbPhotosTableUpdateCompanionBuilder = ClimbPhotosCompanion
+    Function({
+  Value<String> syncId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+  Value<bool> dirty,
+  Value<int> id,
+  Value<int> climbId,
+  Value<String> path,
+  Value<int> sortOrder,
+  Value<DateTime> createdAt,
+});
 
 final class $$ClimbPhotosTableReferences
     extends BaseReferences<_$AppDatabase, $ClimbPhotosTable, ClimbPhoto> {
@@ -3933,44 +3896,44 @@ class $$ClimbPhotosTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<String> get path => $composableBuilder(
-    column: $table.path,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.path,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<int> get sortOrder => $composableBuilder(
-    column: $table.sortOrder,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.sortOrder,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnFilters(column),
+      );
 
   $$ClimbsTableFilterComposer get climbId {
     final $$ClimbsTableFilterComposer composer = $composerBuilder(
@@ -3978,19 +3941,18 @@ class $$ClimbPhotosTableFilterComposer
       getCurrentColumn: (t) => t.climbId,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableFilterComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableFilterComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -4006,44 +3968,44 @@ class $$ClimbPhotosTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get syncId => $composableBuilder(
-    column: $table.syncId,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.syncId,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.updatedAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get isDeleted => $composableBuilder(
-    column: $table.isDeleted,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.isDeleted,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<bool> get dirty => $composableBuilder(
-    column: $table.dirty,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.dirty,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.id,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<String> get path => $composableBuilder(
-    column: $table.path,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.path,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<int> get sortOrder => $composableBuilder(
-    column: $table.sortOrder,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.sortOrder,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.createdAt,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   $$ClimbsTableOrderingComposer get climbId {
     final $$ClimbsTableOrderingComposer composer = $composerBuilder(
@@ -4051,19 +4013,18 @@ class $$ClimbPhotosTableOrderingComposer
       getCurrentColumn: (t) => t.climbId,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableOrderingComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableOrderingComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
@@ -4108,173 +4069,159 @@ class $$ClimbPhotosTableAnnotationComposer
       getCurrentColumn: (t) => t.climbId,
       referencedTable: $db.climbs,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$ClimbsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.climbs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
+      builder: (
+        joinBuilder, {
+        $addJoinBuilderToRootComposer,
+        $removeJoinBuilderFromRootComposer,
+      }) =>
+          $$ClimbsTableAnnotationComposer(
+        $db: $db,
+        $table: $db.climbs,
+        $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+        joinBuilder: joinBuilder,
+        $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
+      ),
     );
     return composer;
   }
 }
 
-class $$ClimbPhotosTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $ClimbPhotosTable,
-          ClimbPhoto,
-          $$ClimbPhotosTableFilterComposer,
-          $$ClimbPhotosTableOrderingComposer,
-          $$ClimbPhotosTableAnnotationComposer,
-          $$ClimbPhotosTableCreateCompanionBuilder,
-          $$ClimbPhotosTableUpdateCompanionBuilder,
-          (ClimbPhoto, $$ClimbPhotosTableReferences),
-          ClimbPhoto,
-          PrefetchHooks Function({bool climbId})
-        > {
+class $$ClimbPhotosTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ClimbPhotosTable,
+    ClimbPhoto,
+    $$ClimbPhotosTableFilterComposer,
+    $$ClimbPhotosTableOrderingComposer,
+    $$ClimbPhotosTableAnnotationComposer,
+    $$ClimbPhotosTableCreateCompanionBuilder,
+    $$ClimbPhotosTableUpdateCompanionBuilder,
+    (ClimbPhoto, $$ClimbPhotosTableReferences),
+    ClimbPhoto,
+    PrefetchHooks Function({bool climbId})> {
   $$ClimbPhotosTableTableManager(_$AppDatabase db, $ClimbPhotosTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$ClimbPhotosTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$ClimbPhotosTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$ClimbPhotosTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                Value<int> climbId = const Value.absent(),
-                Value<String> path = const Value.absent(),
-                Value<int> sortOrder = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => ClimbPhotosCompanion(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                climbId: climbId,
-                path: path,
-                sortOrder: sortOrder,
-                createdAt: createdAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<String> syncId = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-                Value<bool> isDeleted = const Value.absent(),
-                Value<bool> dirty = const Value.absent(),
-                Value<int> id = const Value.absent(),
-                required int climbId,
-                required String path,
-                Value<int> sortOrder = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-              }) => ClimbPhotosCompanion.insert(
-                syncId: syncId,
-                updatedAt: updatedAt,
-                isDeleted: isDeleted,
-                dirty: dirty,
-                id: id,
-                climbId: climbId,
-                path: path,
-                sortOrder: sortOrder,
-                createdAt: createdAt,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$ClimbPhotosTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: ({climbId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$ClimbPhotosTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$ClimbPhotosTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$ClimbPhotosTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              Value<int> climbId = const Value.absent(),
+              Value<String> path = const Value.absent(),
+              Value<int> sortOrder = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                ClimbPhotosCompanion(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              climbId: climbId,
+              path: path,
+              sortOrder: sortOrder,
+              createdAt: createdAt,
+            ),
+            createCompanionCallback: ({
+              Value<String> syncId = const Value.absent(),
+              Value<DateTime> updatedAt = const Value.absent(),
+              Value<bool> isDeleted = const Value.absent(),
+              Value<bool> dirty = const Value.absent(),
+              Value<int> id = const Value.absent(),
+              required int climbId,
+              required String path,
+              Value<int> sortOrder = const Value.absent(),
+              Value<DateTime> createdAt = const Value.absent(),
+            }) =>
+                ClimbPhotosCompanion.insert(
+              syncId: syncId,
+              updatedAt: updatedAt,
+              isDeleted: isDeleted,
+              dirty: dirty,
+              id: id,
+              climbId: climbId,
+              path: path,
+              sortOrder: sortOrder,
+              createdAt: createdAt,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map(
+                  (e) => (
+                    e.readTable(table),
+                    $$ClimbPhotosTableReferences(db, table, e),
+                  ),
+                )
+                .toList(),
+            prefetchHooksCallback: ({climbId = false}) {
+              return PrefetchHooks(
+                db: db,
+                explicitlyWatchedTables: [],
+                addJoins: <
                     T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (climbId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.climbId,
-                                referencedTable: $$ClimbPhotosTableReferences
-                                    ._climbIdTable(db),
-                                referencedColumn: $$ClimbPhotosTableReferences
-                                    ._climbIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic,
+                        dynamic>>(state) {
+                  if (climbId) {
+                    state = state.withJoin(
+                      currentTable: table,
+                      currentColumn: table.climbId,
+                      referencedTable:
+                          $$ClimbPhotosTableReferences._climbIdTable(db),
+                      referencedColumn:
+                          $$ClimbPhotosTableReferences._climbIdTable(db).id,
+                    ) as T;
+                  }
 
-                    return state;
-                  },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
-        ),
-      );
+                  return state;
+                },
+                getPrefetchedDataCallback: (items) async {
+                  return [];
+                },
+              );
+            },
+          ),
+        );
 }
 
-typedef $$ClimbPhotosTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $ClimbPhotosTable,
-      ClimbPhoto,
-      $$ClimbPhotosTableFilterComposer,
-      $$ClimbPhotosTableOrderingComposer,
-      $$ClimbPhotosTableAnnotationComposer,
-      $$ClimbPhotosTableCreateCompanionBuilder,
-      $$ClimbPhotosTableUpdateCompanionBuilder,
-      (ClimbPhoto, $$ClimbPhotosTableReferences),
-      ClimbPhoto,
-      PrefetchHooks Function({bool climbId})
-    >;
-typedef $$SyncMetaTableCreateCompanionBuilder =
-    SyncMetaCompanion Function({
-      required String key,
-      Value<DateTime?> value,
-      Value<int> rowid,
-    });
-typedef $$SyncMetaTableUpdateCompanionBuilder =
-    SyncMetaCompanion Function({
-      Value<String> key,
-      Value<DateTime?> value,
-      Value<int> rowid,
-    });
+typedef $$ClimbPhotosTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ClimbPhotosTable,
+    ClimbPhoto,
+    $$ClimbPhotosTableFilterComposer,
+    $$ClimbPhotosTableOrderingComposer,
+    $$ClimbPhotosTableAnnotationComposer,
+    $$ClimbPhotosTableCreateCompanionBuilder,
+    $$ClimbPhotosTableUpdateCompanionBuilder,
+    (ClimbPhoto, $$ClimbPhotosTableReferences),
+    ClimbPhoto,
+    PrefetchHooks Function({bool climbId})>;
+typedef $$SyncMetaTableCreateCompanionBuilder = SyncMetaCompanion Function({
+  required String key,
+  Value<DateTime?> value,
+  Value<int> rowid,
+});
+typedef $$SyncMetaTableUpdateCompanionBuilder = SyncMetaCompanion Function({
+  Value<String> key,
+  Value<DateTime?> value,
+  Value<int> rowid,
+});
 
 class $$SyncMetaTableFilterComposer
     extends Composer<_$AppDatabase, $SyncMetaTable> {
@@ -4286,14 +4233,14 @@ class $$SyncMetaTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<String> get key => $composableBuilder(
-    column: $table.key,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.key,
+        builder: (column) => ColumnFilters(column),
+      );
 
   ColumnFilters<DateTime> get value => $composableBuilder(
-    column: $table.value,
-    builder: (column) => ColumnFilters(column),
-  );
+        column: $table.value,
+        builder: (column) => ColumnFilters(column),
+      );
 }
 
 class $$SyncMetaTableOrderingComposer
@@ -4306,14 +4253,14 @@ class $$SyncMetaTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<String> get key => $composableBuilder(
-    column: $table.key,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.key,
+        builder: (column) => ColumnOrderings(column),
+      );
 
   ColumnOrderings<DateTime> get value => $composableBuilder(
-    column: $table.value,
-    builder: (column) => ColumnOrderings(column),
-  );
+        column: $table.value,
+        builder: (column) => ColumnOrderings(column),
+      );
 }
 
 class $$SyncMetaTableAnnotationComposer
@@ -4332,76 +4279,71 @@ class $$SyncMetaTableAnnotationComposer
       $composableBuilder(column: $table.value, builder: (column) => column);
 }
 
-class $$SyncMetaTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $SyncMetaTable,
-          SyncMetaData,
-          $$SyncMetaTableFilterComposer,
-          $$SyncMetaTableOrderingComposer,
-          $$SyncMetaTableAnnotationComposer,
-          $$SyncMetaTableCreateCompanionBuilder,
-          $$SyncMetaTableUpdateCompanionBuilder,
-          (
-            SyncMetaData,
-            BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaData>,
-          ),
-          SyncMetaData,
-          PrefetchHooks Function()
-        > {
+class $$SyncMetaTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SyncMetaTable,
+    SyncMetaData,
+    $$SyncMetaTableFilterComposer,
+    $$SyncMetaTableOrderingComposer,
+    $$SyncMetaTableAnnotationComposer,
+    $$SyncMetaTableCreateCompanionBuilder,
+    $$SyncMetaTableUpdateCompanionBuilder,
+    (
+      SyncMetaData,
+      BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaData>,
+    ),
+    SyncMetaData,
+    PrefetchHooks Function()> {
   $$SyncMetaTableTableManager(_$AppDatabase db, $SyncMetaTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$SyncMetaTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$SyncMetaTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$SyncMetaTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> key = const Value.absent(),
-                Value<DateTime?> value = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => SyncMetaCompanion(key: key, value: value, rowid: rowid),
-          createCompanionCallback:
-              ({
-                required String key,
-                Value<DateTime?> value = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => SyncMetaCompanion.insert(
-                key: key,
-                value: value,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
-          prefetchHooksCallback: null,
-        ),
-      );
+      : super(
+          TableManagerState(
+            db: db,
+            table: table,
+            createFilteringComposer: () =>
+                $$SyncMetaTableFilterComposer($db: db, $table: table),
+            createOrderingComposer: () =>
+                $$SyncMetaTableOrderingComposer($db: db, $table: table),
+            createComputedFieldComposer: () =>
+                $$SyncMetaTableAnnotationComposer($db: db, $table: table),
+            updateCompanionCallback: ({
+              Value<String> key = const Value.absent(),
+              Value<DateTime?> value = const Value.absent(),
+              Value<int> rowid = const Value.absent(),
+            }) =>
+                SyncMetaCompanion(key: key, value: value, rowid: rowid),
+            createCompanionCallback: ({
+              required String key,
+              Value<DateTime?> value = const Value.absent(),
+              Value<int> rowid = const Value.absent(),
+            }) =>
+                SyncMetaCompanion.insert(
+              key: key,
+              value: value,
+              rowid: rowid,
+            ),
+            withReferenceMapper: (p0) => p0
+                .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+                .toList(),
+            prefetchHooksCallback: null,
+          ),
+        );
 }
 
-typedef $$SyncMetaTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $SyncMetaTable,
+typedef $$SyncMetaTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SyncMetaTable,
+    SyncMetaData,
+    $$SyncMetaTableFilterComposer,
+    $$SyncMetaTableOrderingComposer,
+    $$SyncMetaTableAnnotationComposer,
+    $$SyncMetaTableCreateCompanionBuilder,
+    $$SyncMetaTableUpdateCompanionBuilder,
+    (
       SyncMetaData,
-      $$SyncMetaTableFilterComposer,
-      $$SyncMetaTableOrderingComposer,
-      $$SyncMetaTableAnnotationComposer,
-      $$SyncMetaTableCreateCompanionBuilder,
-      $$SyncMetaTableUpdateCompanionBuilder,
-      (
-        SyncMetaData,
-        BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaData>,
-      ),
-      SyncMetaData,
-      PrefetchHooks Function()
-    >;
+      BaseReferences<_$AppDatabase, $SyncMetaTable, SyncMetaData>,
+    ),
+    SyncMetaData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

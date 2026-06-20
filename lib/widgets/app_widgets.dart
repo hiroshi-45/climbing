@@ -42,9 +42,7 @@ class GlassCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppPalette.surface,
         borderRadius: radius,
-        border: gradientBorder
-            ? null
-            : Border.all(color: AppPalette.stroke),
+        border: gradientBorder ? null : Border.all(color: AppPalette.stroke),
         boxShadow: const [
           BoxShadow(
             color: Color(0x33000000),
@@ -357,7 +355,8 @@ class _ConfettiPainter extends CustomPainter {
       canvas.rotate(p.rotation + p.spin * t * 30);
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromCenter(center: Offset.zero, width: p.size, height: p.size * 0.6),
+          Rect.fromCenter(
+              center: Offset.zero, width: p.size, height: p.size * 0.6),
           const Radius.circular(2),
         ),
         paint,

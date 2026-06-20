@@ -5,10 +5,10 @@ import 'package:latlong2/latlong.dart';
 void main() {
   group('NearbyGym.distanceLabel', () {
     NearbyGym at(double? meters) => NearbyGym(
-      name: 'テストジム',
-      location: const LatLng(35.0, 139.0),
-      distanceMeters: meters,
-    );
+          name: 'テストジム',
+          location: const LatLng(35.0, 139.0),
+          distanceMeters: meters,
+        );
 
     test('1km未満はメートル表示', () {
       expect(at(0).distanceLabel, '0m');

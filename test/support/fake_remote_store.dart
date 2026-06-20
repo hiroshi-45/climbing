@@ -7,7 +7,8 @@ class FakeRemoteStore implements RemoteSyncStore {
   final Map<String, Map<String, Map<String, Object?>>> _data = {};
 
   @override
-  Future<void> upsert(String collection, List<Map<String, Object?>> docs) async {
+  Future<void> upsert(
+      String collection, List<Map<String, Object?>> docs) async {
     final col = _data.putIfAbsent(collection, () => {});
     for (final d in docs) {
       col[d['syncId'] as String] = Map<String, Object?>.from(d);
@@ -21,21 +22,18 @@ class FakeRemoteStore implements RemoteSyncStore {
   ) async {
     final col = _data[collection];
     if (col == null) return const [];
-    final list =
-        col.values
-            // updatedAt >= since（境界の取りこぼし防止。適用側は LWW で冪等）。
-            .where(
-              (d) =>
-                  since == null ||
-                  !(d['updatedAt'] as DateTime).isBefore(since),
-            )
-            .map((d) => Map<String, Object?>.from(d))
-            .toList()
-          ..sort(
-            (a, b) => (a['updatedAt'] as DateTime).compareTo(
-              b['updatedAt'] as DateTime,
-            ),
-          );
+    final list = col.values
+        // updatedAt >= since（境界の取りこぼし防止。適用側は LWW で冪等）。
+        .where(
+          (d) => since == null || !(d['updatedAt'] as DateTime).isBefore(since),
+        )
+        .map((d) => Map<String, Object?>.from(d))
+        .toList()
+      ..sort(
+        (a, b) => (a['updatedAt'] as DateTime).compareTo(
+          b['updatedAt'] as DateTime,
+        ),
+      );
     return list;
   }
 

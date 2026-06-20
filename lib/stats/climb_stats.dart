@@ -142,23 +142,21 @@ ClimbStats computeStats(
     return MonthlyCount(d.year, d.month, monthSends[k]!, monthTotal[k]!);
   }).toList();
 
-  final grades =
-      gradeTotal.keys
-          .map((g) => RateStat(g, gradeSends[g] ?? 0, gradeTotal[g]!))
-          .toList()
-        ..sort((a, b) => b.total.compareTo(a.total));
+  final grades = gradeTotal.keys
+      .map((g) => RateStat(g, gradeSends[g] ?? 0, gradeTotal[g]!))
+      .toList()
+    ..sort((a, b) => b.total.compareTo(a.total));
 
-  final walls =
-      wallTotal.keys
-          .map(
-            (id) => RateStat(
-              wallTypes[id]?.name ?? '(削除済み)',
-              wallSends[id] ?? 0,
-              wallTotal[id]!,
-            ),
-          )
-          .toList()
-        ..sort((a, b) => a.rate.compareTo(b.rate)); // 苦手（低い）を上に
+  final walls = wallTotal.keys
+      .map(
+        (id) => RateStat(
+          wallTypes[id]?.name ?? '(削除済み)',
+          wallSends[id] ?? 0,
+          wallTotal[id]!,
+        ),
+      )
+      .toList()
+    ..sort((a, b) => a.rate.compareTo(b.rate)); // 苦手（低い）を上に
 
   final activeDays = <DateTime>{
     for (final c in climbs) DateTime(c.date.year, c.date.month, c.date.day),

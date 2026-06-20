@@ -22,7 +22,8 @@ Future<int> _addGym(
   required DateTime at,
 }) {
   return db.insertGym(
-    GymsCompanion.insert(name: name, syncId: Value(syncId), updatedAt: Value(at)),
+    GymsCompanion.insert(
+        name: name, syncId: Value(syncId), updatedAt: Value(at)),
   );
 }
 
@@ -87,7 +88,10 @@ void main() {
 
     // B が後で編集（t2 > t1）
     await (b.update(b.climbs)..where((c) => c.syncId.equals('c1'))).write(
-      ClimbsCompanion(grade: const Value('V4'), updatedAt: Value(t2), dirty: const Value(true)),
+      ClimbsCompanion(
+          grade: const Value('V4'),
+          updatedAt: Value(t2),
+          dirty: const Value(true)),
     );
     await SyncService(b, remote).sync();
 
@@ -111,13 +115,19 @@ void main() {
 
     // A をより新しく編集（t3）してからリモートへ
     await (a.update(a.climbs)..where((c) => c.syncId.equals('c1'))).write(
-      ClimbsCompanion(grade: const Value('A-new'), updatedAt: Value(t3), dirty: const Value(true)),
+      ClimbsCompanion(
+          grade: const Value('A-new'),
+          updatedAt: Value(t3),
+          dirty: const Value(true)),
     );
     await SyncService(a, remote).sync();
 
     // B が古い編集（t2）をしていた場合、push 後に A が pull しても上書きされない
     await (b.update(b.climbs)..where((c) => c.syncId.equals('c1'))).write(
-      ClimbsCompanion(grade: const Value('B-old'), updatedAt: Value(t2), dirty: const Value(true)),
+      ClimbsCompanion(
+          grade: const Value('B-old'),
+          updatedAt: Value(t2),
+          dirty: const Value(true)),
     );
     await SyncService(b, remote).sync(); // push(t2) は remote の t3 を上書きしない…
     await SyncService(a, remote).sync();
@@ -141,7 +151,10 @@ void main() {
 
     // A が削除（論理削除, t3）
     await (a.update(a.climbs)..where((c) => c.syncId.equals('c1'))).write(
-      ClimbsCompanion(isDeleted: const Value(true), updatedAt: Value(t3), dirty: const Value(true)),
+      ClimbsCompanion(
+          isDeleted: const Value(true),
+          updatedAt: Value(t3),
+          dirty: const Value(true)),
     );
     await SyncService(a, remote).sync();
     await SyncService(b, remote).sync();

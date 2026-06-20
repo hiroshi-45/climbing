@@ -163,8 +163,8 @@ class _GymTile extends StatelessWidget {
                       const SizedBox(width: 10),
                     ],
                     Pill(
-                      label: gradeSystemLabels[gym.gradeSystem] ??
-                          gym.gradeSystem,
+                      label:
+                          gradeSystemLabels[gym.gradeSystem] ?? gym.gradeSystem,
                       color: AppPalette.sunsetMid,
                       filled: true,
                     ),
@@ -204,7 +204,8 @@ class _EmptyGyms extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(Icons.storefront, size: 44, color: Colors.white),
+              child:
+                  const Icon(Icons.storefront, size: 44, color: Colors.white),
             ),
             const SizedBox(height: 20),
             const Text(

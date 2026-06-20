@@ -132,40 +132,42 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-            FutureBuilder<List<Package>>(
-              future: _packagesFuture,
-              builder: (context, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                final packages = snap.data ?? const [];
-                if (packages.isEmpty) {
-                  return _UnavailableNotice(
-                    onDebugUnlock: kDebugMode
-                        ? () {
-                            ref.read(premiumProvider.notifier).setPremium(true);
-                            Navigator.of(context).pop();
-                          }
-                        : null,
-                  );
-                }
-                return Column(
-                  children: packages
-                      .map(
-                        (p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: FilledButton(
-                            onPressed: () => _buy(p),
-                            child: Text(
-                              '${p.storeProduct.title} ・ ${p.storeProduct.priceString}',
+              FutureBuilder<List<Package>>(
+                future: _packagesFuture,
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  final packages = snap.data ?? const [];
+                  if (packages.isEmpty) {
+                    return _UnavailableNotice(
+                      onDebugUnlock: kDebugMode
+                          ? () {
+                              ref
+                                  .read(premiumProvider.notifier)
+                                  .setPremium(true);
+                              Navigator.of(context).pop();
+                            }
+                          : null,
+                    );
+                  }
+                  return Column(
+                    children: packages
+                        .map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: FilledButton(
+                              onPressed: () => _buy(p),
+                              child: Text(
+                                '${p.storeProduct.title} ・ ${p.storeProduct.priceString}',
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                );
-              },
-            ),
+                        )
+                        .toList(),
+                  );
+                },
+              ),
               const SizedBox(height: 8),
               TextButton(onPressed: _restore, child: const Text('購入を復元')),
             ],

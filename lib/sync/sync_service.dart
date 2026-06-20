@@ -60,9 +60,8 @@ class SyncService {
     final wallSyncId = {
       for (final w in await _db.allWallTypesRaw()) w.id: w.syncId,
     };
-    final docs = dirty
-        .map((c) => _climbToDoc(c, gymSyncId, wallSyncId))
-        .toList();
+    final docs =
+        dirty.map((c) => _climbToDoc(c, gymSyncId, wallSyncId)).toList();
     await _remote.upsert(SyncCollections.climbs, docs);
     for (final c in dirty) {
       await _db.markClimbSynced(c.syncId, c.updatedAt);
@@ -170,37 +169,39 @@ class SyncService {
   // ===================== シリアライズ =====================
 
   Map<String, Object?> _gymToDoc(Gym g) => {
-    'syncId': g.syncId,
-    'name': g.name,
-    'location': g.location,
-    'gradeSystem': g.gradeSystem,
-    'createdAt': g.createdAt,
-    'updatedAt': g.updatedAt,
-    'isDeleted': g.isDeleted,
-  };
+        'syncId': g.syncId,
+        'name': g.name,
+        'location': g.location,
+        'gradeSystem': g.gradeSystem,
+        'createdAt': g.createdAt,
+        'updatedAt': g.updatedAt,
+        'isDeleted': g.isDeleted,
+      };
 
   Map<String, Object?> _wallTypeToDoc(WallType w) => {
-    'syncId': w.syncId,
-    'name': w.name,
-    'updatedAt': w.updatedAt,
-    'isDeleted': w.isDeleted,
-  };
+        'syncId': w.syncId,
+        'name': w.name,
+        'updatedAt': w.updatedAt,
+        'isDeleted': w.isDeleted,
+      };
 
   Map<String, Object?> _climbToDoc(
     Climb c,
     Map<int, String> gymSyncId,
     Map<int, String> wallSyncId,
-  ) => {
-    'syncId': c.syncId,
-    'gymSyncId': gymSyncId[c.gymId],
-    'wallTypeSyncId': c.wallTypeId == null ? null : wallSyncId[c.wallTypeId],
-    'date': c.date,
-    'grade': c.grade,
-    'attempts': c.attempts,
-    'isSent': c.isSent,
-    'memo': c.memo,
-    'createdAt': c.createdAt,
-    'updatedAt': c.updatedAt,
-    'isDeleted': c.isDeleted,
-  };
+  ) =>
+      {
+        'syncId': c.syncId,
+        'gymSyncId': gymSyncId[c.gymId],
+        'wallTypeSyncId':
+            c.wallTypeId == null ? null : wallSyncId[c.wallTypeId],
+        'date': c.date,
+        'grade': c.grade,
+        'attempts': c.attempts,
+        'isSent': c.isSent,
+        'memo': c.memo,
+        'createdAt': c.createdAt,
+        'updatedAt': c.updatedAt,
+        'isDeleted': c.isDeleted,
+      };
 }
